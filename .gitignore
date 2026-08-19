@@ -1,0 +1,13 @@
+/node_modules
+/vendor
+/.env
+/.env.backup
+/build
+/dist
+/_client_setup_logs
+/_setup_logs
+/_logs
+*.log
+database.sqlite
+.DS_Store
+Thumbs.db
