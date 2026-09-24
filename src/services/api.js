@@ -140,6 +140,17 @@ export const adminAPI = {
   rejectUser: (id) => api.put(`/admin/users/${id}/reject`),
   deleteUser: (id) => api.delete(`/admin/users/${id}`),
   allProgress: () => api.get('/admin/progress'),
+  getRoles: () => api.get('/admin/roles'),
+};
+
+export const executiveAnalyticsAPI = {
+  getAnalytics: (params) => api.get('/analytics/executive', { params }),
+};
+
+export const systemHealthAPI = {
+  getHealth: () => api.get('/admin/system-health'),
+  flushCache: () => api.post('/admin/cache-flush'),
 };
 
 export default api;
+

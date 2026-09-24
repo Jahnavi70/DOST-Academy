@@ -188,9 +188,11 @@ function ManageUsersPage() {
   };
 
   const roleBadge = (r) => {
-    if (r === "admin") return { bg: "#DBEAFE", color: "#1E40AF" };
-    if (r === "mentor") return { bg: "#FEF9C3", color: "#854D0E" };
-    return { bg: "#F1F5F9", color: "#475569" };
+    if (r === "admin") return { bg: "#DBEAFE", color: "#1E40AF", label: "Super Admin" };
+    if (r === "admin_functional") return { bg: "#EEF2FF", color: "#2563EB", label: "Admin (HR / Functional)" };
+    if (r === "admin_technical") return { bg: "#0F172A", color: "#38BDF8", label: "Admin (IT / Technical)" };
+    if (r === "mentor") return { bg: "#FEF9C3", color: "#854D0E", label: "Mentor" };
+    return { bg: "#F1F5F9", color: "#475569", label: "Employee" };
   };
 
   return (
@@ -206,6 +208,8 @@ function ManageUsersPage() {
         <div style={styles.navSection}>
           <div style={styles.navLinks}>
             <button style={styles.navButton} onClick={() => navigate("/admin-dashboard")}>Dashboard</button>
+            <button style={styles.navButton} onClick={() => navigate("/executive-dashboard")}>Executive Analytics</button>
+            <button style={styles.navButton} onClick={() => navigate("/it-dashboard")}>IT Diagnostics</button>
             <button style={styles.activeButton}>Users & Mentors</button>
             <button style={styles.navButton} onClick={() => navigate("/manage-curriculums")}>Branches</button>
             <button style={styles.navButton} onClick={() => navigate("/manage-courses")}>Courses (Monitor)</button>
@@ -376,7 +380,9 @@ function ManageUsersPage() {
                 >
                   <option value="mentor">Teacher / Mentor</option>
                   <option value="employee">Learner / Employee</option>
-                  <option value="admin">Administrator</option>
+                  <option value="admin_functional">Admin - Functional (HR / Supervisor)</option>
+                  <option value="admin_technical">Admin - Technical (IT Operations)</option>
+                  <option value="admin">Super Administrator</option>
                 </select>
 
                 <label style={styles.label}>Full Name *</label>
@@ -487,7 +493,9 @@ function ManageUsersPage() {
                     >
                       <option value="employee">Learner / Employee</option>
                       <option value="mentor">Teacher / Mentor</option>
-                      <option value="admin">Administrator</option>
+                      <option value="admin_functional">Admin - Functional (HR / Supervisor)</option>
+                      <option value="admin_technical">Admin - Technical (IT Operations)</option>
+                      <option value="admin">Super Administrator</option>
                     </select>
                   </div>
                   <div>

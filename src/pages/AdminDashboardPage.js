@@ -45,6 +45,8 @@ function AdminDashboardPage() {
         <div style={styles.navSection}>
           <div style={styles.navLinks}>
             <button style={styles.activeButton}>Dashboard</button>
+            <button style={styles.navButton} onClick={() => navigate("/executive-dashboard")}>Executive Analytics</button>
+            <button style={styles.navButton} onClick={() => navigate("/it-dashboard")}>IT Diagnostics</button>
             <button style={styles.navButton} onClick={() => navigate("/manage-users")}>Users & Mentors</button>
             <button style={styles.navButton} onClick={() => navigate("/manage-curriculums")}>Branches</button>
             <button style={styles.navButton} onClick={() => navigate("/manage-courses")}>Courses (Monitor)</button>
@@ -54,6 +56,8 @@ function AdminDashboardPage() {
               {showAdminMenu && (
                 <div style={styles.dropdown}>
                   <p style={styles.dropdownItem} onClick={() => navigate("/admin-dashboard")}>Dashboard</p>
+                  <p style={styles.dropdownItem} onClick={() => navigate("/executive-dashboard")}>Executive Analytics</p>
+                  <p style={styles.dropdownItem} onClick={() => navigate("/it-dashboard")}>IT Diagnostics</p>
                   <p style={styles.dropdownItem} onClick={() => navigate("/manage-users")}>Users & Mentors</p>
                   <p style={styles.dropdownItem} onClick={() => navigate("/manage-curriculums")}>Branches</p>
                   <p style={styles.dropdownItem} onClick={() => navigate("/manage-courses")}>Courses Monitor</p>
@@ -74,12 +78,15 @@ function AdminDashboardPage() {
               Review and approve user registrations, assign teachers/mentors to branches, configure curriculum departments, and oversee institutional learning performance.
             </p>
           </div>
-          <div style={{ display: "flex", gap: "10px" }}>
-            <button style={styles.primaryButton} onClick={() => navigate("/manage-users")}>
-              Manage Users & Approvals
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+            <button style={styles.primaryButton} onClick={() => navigate("/executive-dashboard")}>
+              📊 Executive Visual Analytics
             </button>
-            <button style={styles.secondaryButton} onClick={() => navigate("/manage-curriculums")}>
-              Manage Branches
+            <button style={styles.secondaryButton} onClick={() => navigate("/it-dashboard")}>
+              ⚙️ IT Control Center
+            </button>
+            <button style={styles.secondaryButton} onClick={() => navigate("/manage-users")}>
+              Manage Users & Approvals
             </button>
           </div>
         </section>

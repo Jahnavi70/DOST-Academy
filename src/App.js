@@ -19,6 +19,8 @@ import ManageAssignmentsPage from "./pages/ManageAssignmentsPage";
 import ManageCertificatesPage from "./pages/ManageCertificatesPage";
 import ProgressReportsPage from "./pages/ProgressReportsPage";
 import MentorDashboardPage from "./pages/MentorDashboardPage";
+import ExecutiveDashboardPage from "./pages/ExecutiveDashboardPage";
+import TechAdminDashboardPage from "./pages/TechAdminDashboardPage";
 
 function Loading() {
   return <div style={{ textAlign: "center", padding: 100 }}>Loading...</div>;
@@ -56,13 +58,21 @@ function App() {
           <Route path="/assignments" element={<RoleRoute allow={["employee"]}><AssignmentsPage /></RoleRoute>} />
           <Route path="/certificates" element={<RoleRoute allow={["employee"]}><CertificatesPage /></RoleRoute>} />
           <Route path="/edit-profile" element={<ProtectedRoute><EditProfilePage /></ProtectedRoute>} />
-          <Route path="/admin-dashboard" element={<RoleRoute allow={["admin"]}><AdminDashboardPage /></RoleRoute>} />
-          <Route path="/manage-users" element={<RoleRoute allow={["admin"]}><ManageUsersPage /></RoleRoute>} />
-          <Route path="/manage-curriculums" element={<RoleRoute allow={["admin"]}><ManageCurriculumsPage /></RoleRoute>} />
-          <Route path="/manage-courses" element={<RoleRoute allow={["admin"]}><ManageCoursesPage /></RoleRoute>} />
-          <Route path="/manage-assignments" element={<RoleRoute allow={["admin"]}><ManageAssignmentsPage /></RoleRoute>} />
-          <Route path="/manage-certificates" element={<RoleRoute allow={["admin"]}><ManageCertificatesPage /></RoleRoute>} />
-          <Route path="/progress-reports" element={<RoleRoute allow={["admin"]}><ProgressReportsPage /></RoleRoute>} />
+          
+          {/* Functional Admin & Super Admin */}
+          <Route path="/admin-dashboard" element={<RoleRoute allow={["admin", "admin_functional"]}><AdminDashboardPage /></RoleRoute>} />
+          <Route path="/executive-dashboard" element={<RoleRoute allow={["admin", "admin_functional"]}><ExecutiveDashboardPage /></RoleRoute>} />
+          <Route path="/manage-curriculums" element={<RoleRoute allow={["admin", "admin_functional"]}><ManageCurriculumsPage /></RoleRoute>} />
+          <Route path="/manage-courses" element={<RoleRoute allow={["admin", "admin_functional"]}><ManageCoursesPage /></RoleRoute>} />
+          <Route path="/manage-assignments" element={<RoleRoute allow={["admin", "admin_functional"]}><ManageAssignmentsPage /></RoleRoute>} />
+          <Route path="/manage-certificates" element={<RoleRoute allow={["admin", "admin_functional"]}><ManageCertificatesPage /></RoleRoute>} />
+          <Route path="/progress-reports" element={<RoleRoute allow={["admin", "admin_functional"]}><ProgressReportsPage /></RoleRoute>} />
+
+          {/* Technical IT Admin & Super Admin */}
+          <Route path="/it-dashboard" element={<RoleRoute allow={["admin", "admin_technical"]}><TechAdminDashboardPage /></RoleRoute>} />
+          <Route path="/manage-users" element={<RoleRoute allow={["admin", "admin_technical"]}><ManageUsersPage /></RoleRoute>} />
+
+          {/* Mentor */}
           <Route path="/mentor-dashboard" element={<RoleRoute allow={["mentor"]}><MentorDashboardPage /></RoleRoute>} />
           <Route path="*" element={<ProtectedRoute><Navigate to="/" replace /></ProtectedRoute>} />
         </Routes>
