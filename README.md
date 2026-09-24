@@ -6,11 +6,18 @@ DOST Academy System is a centralized Learning Management System (LMS) developed 
 
 ## Team Details
 
-**Team Name:** Team 59 (AstraLink)
-**Unit:** IFN735 – Industry Project
-**Project Title:** DOST Academy System
-**Industry Partner:** Department of Science and Technology (DOST)
-**Team Members:** Jahnavi, Harika, Rajasekhar, Balaji, Nikhittha, Reethika
+**Team Name:** Team 59 (AstraLink)  
+**Unit:** IFN735 – Industry Project  
+**Project Title:** DOST Academy System  
+**Industry Partner:** Department of Science and Technology (DOST)  
+
+### Team Roster
+- **Jahnavi Kambhampati** (`jahnavikambhampati1109@gmail.com`) — Project Lead & System Delivery Owner
+- **Satya Harika** (`satyaharika.nekkanti@gmail.com`) — Lead UI/UX Frontend Engineer
+- **Rajashekar chava** (`rajachava27@gmail.com`) — Lead Backend & Database Architect
+- **Nikhittha Mukkala** (`nikki6112002@gmail.com`) — QA Lead & Verification Engineer
+- **Balaji Vamshi Pasala** (`balajivamshi4211@gmail.com`) — DevOps, Build & Public Asset Engineer
+- **Reethika Katkuri** (`reethikakatkuri@gmail.com`) — Technical Documentation & Demonstration Specialist
 
 ## Technologies
 

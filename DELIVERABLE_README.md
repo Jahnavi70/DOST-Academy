@@ -3,6 +3,14 @@
 **Team 59 (AstraLink) · IFN735 Industry Project**  
 Learning Management System for the Department of Science and Technology (DOST)
 
+### Team Roster & Roles
+- **Jahnavi Kambhampati** (`jahnavikambhampati1109@gmail.com`) — Project Lead & System Delivery Owner
+- **Satya Harika** (`satyaharika.nekkanti@gmail.com`) — Lead UI/UX Frontend Engineer
+- **Rajashekar chava** (`rajachava27@gmail.com`) — Lead Backend & Database Architect
+- **Nikhittha Mukkala** (`nikki6112002@gmail.com`) — QA Lead & Verification Engineer
+- **Balaji Vamshi Pasala** (`balajivamshi4211@gmail.com`) — DevOps, Build & Public Asset Engineer
+- **Reethika Katkuri** (`reethikakatkuri@gmail.com`) — Technical Documentation & Demonstration Specialist
+
 ---
 
 ## 1. Contents
@@ -14,6 +22,7 @@ Learning Management System for the Department of Science and Technology (DOST)
 | `RUN_BACKEND.bat` | Start Laravel API only (port 8000) |
 | `RUN_FRONTEND.bat` | Start React app only (port 3000) |
 | `RESET_DB.bat` | Wipe and re-seed demo data |
+| `MANUAL_DEMONSTRATION_FLOW_SCRIPT.md` | Comprehensive 10-step client evaluation walkthrough |
 | `PACKAGE_CLIENT_DELIVERABLE.ps1` | Rebuild this zip from source |
 
 Source layout: Laravel 10 backend (`app/`, `routes/`, `database/`) + React 18 frontend (`src/`).
