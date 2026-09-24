@@ -417,14 +417,14 @@ function ManageUsersPage() {
 
                 {addForm.role === "mentor" && (
                   <div>
-                    <label style={styles.label}>Assigned Branch / Curriculum *</label>
+                    <label style={styles.label}>Assigned Branch / Curriculum {curriculums.length > 0 ? '*' : '(Optional)'}</label>
                     <select
                       style={styles.input}
                       value={addForm.curriculum_id}
                       onChange={(e) => setAddForm({ ...addForm, curriculum_id: e.target.value })}
-                      required
+                      required={curriculums.length > 0}
                     >
-                      <option value="">Select Branch / Curriculum</option>
+                      <option value="">{curriculums.length > 0 ? "Select Branch / Curriculum" : "None / Unassigned"}</option>
                       {curriculums.map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.title} ({c.category})
