@@ -21,7 +21,10 @@ class User extends Authenticatable implements JWTSubject {
     public function certificates() { return $this->hasMany(\App\Models\Certificate::class); }
     public function notifications() { return $this->hasMany(\App\Models\Notification::class); }
     public function mentoredCourses() { return $this->hasMany(\App\Models\Course::class, 'mentor_id'); }
-    public function getIsAdminAttribute() { return $this->role === 'admin'; }
+    public function getIsSuperAdminAttribute() { return $this->role === 'admin'; }
+    public function getIsAdminFunctionalAttribute() { return in_array($this->role, ['admin', 'admin_functional']); }
+    public function getIsAdminTechnicalAttribute() { return in_array($this->role, ['admin', 'admin_technical']); }
+    public function getIsAdminAttribute() { return in_array($this->role, ['admin', 'admin_functional', 'admin_technical']); }
     public function getIsMentorAttribute() { return $this->role === 'mentor'; }
     public function getIsEmployeeAttribute() { return $this->role === 'employee'; }
     public function getIsApprovedAttribute() { return $this->status === 'approved'; }

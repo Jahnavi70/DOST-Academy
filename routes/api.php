@@ -15,6 +15,8 @@ use App\Http\Controllers\AdminProgressController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\CourseContentController;
+use App\Http\Controllers\ExecutiveAnalyticsController;
+use App\Http\Controllers\SystemHealthController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\AdminOnly;
 use App\Http\Middleware\MentorOnly;
@@ -92,7 +94,11 @@ Route::group(['middleware' => Authenticate::class], function () {
         Route::put('/admin/users/{id}/approve', [AdminController::class, 'approveUser']);
         Route::put('/admin/users/{id}/reject', [AdminController::class, 'rejectUser']);
         Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser']);
+        Route::get('/admin/roles', [AdminController::class, 'availableRoles']);
         Route::get('/admin/progress', [AdminProgressController::class, 'index']);
+        Route::get('/analytics/executive', [ExecutiveAnalyticsController::class, 'getAnalytics']);
+        Route::get('/admin/system-health', [SystemHealthController::class, 'getHealth']);
+        Route::post('/admin/cache-flush', [SystemHealthController::class, 'flushCache']);
 
         // Admin manages Curriculums / Branches
         Route::post('/curriculums', [CurriculumController::class, 'store']);

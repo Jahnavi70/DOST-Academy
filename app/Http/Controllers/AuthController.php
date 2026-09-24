@@ -50,7 +50,7 @@ class AuthController extends Controller {
         $user = JWTAuth::user();
 
         // Approval checks for non-admin accounts
-        if ($user->role !== 'admin') {
+        if (!$user->is_admin) {
             if ($user->status === 'pending') {
                 try { JWTAuth::invalidate($token); } catch (\Exception $e) {}
                 return response()->json([

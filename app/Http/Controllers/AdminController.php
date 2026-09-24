@@ -52,7 +52,7 @@ class AdminController extends Controller {
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:employee,mentor,admin',
+            'role' => 'required|in:employee,mentor,admin,admin_functional,admin_technical',
             'department' => 'nullable|string|max:255',
             'curriculum_id' => 'nullable|exists:curriculums,id',
             'bio' => 'nullable|string',
@@ -77,7 +77,7 @@ class AdminController extends Controller {
         $request->validate([
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:users,email,' . $id,
-            'role' => 'sometimes|in:employee,mentor,admin',
+            'role' => 'sometimes|in:employee,mentor,admin,admin_functional,admin_technical',
             'status' => 'sometimes|in:pending,approved,rejected',
             'department' => 'nullable|string|max:255',
             'curriculum_id' => 'nullable|exists:curriculums,id',
@@ -123,5 +123,15 @@ class AdminController extends Controller {
         $user = User::findOrFail($id);
         $user->delete();
         return response()->json(['message' => 'User deleted successfully']);
+    }
+
+    public function availableRoles() {
+        return response()->json([
+            ['value' => 'employee', 'label' => 'Employee / Learner', 'description' => 'General DOST personnel taking training courses'],
+            ['value' => 'mentor', 'label' => 'Mentor / Instructor', 'description' => 'Branch instructor managing lessons, courses, and grading'],
+            ['value' => 'admin_functional', 'label' => 'Admin - Functional (HR / Supervisor)', 'description' => 'Oversees curriculum, course approvals, mentor assignments, and executive analytics'],
+            ['value' => 'admin_technical', 'label' => 'Admin - Technical (IT Systems)', 'description' => 'Manages system telemetry, security logs, user permissions, and database operations'],
+            ['value' => 'admin', 'label' => 'Super Administrator', 'description' => 'Full administrative access across functional and technical portals'],
+        ]);
     }
 }
