@@ -1,0 +1,83 @@
+/* DOST Academy LMS - Global Design Stylesheet (Apple HIG & Enterprise Responsive) */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #F8FAFC;
+  color: #0F172A;
+  min-height: 100vh;
+}
+
+/* Fluid Widescreen Container - expands comfortably on 1080p, 1440p, 4K displays */
+.lms-page-container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: clamp(16px, 2.5vw, 36px);
+  box-sizing: border-box;
+}
+
+/* Responsive Grid System */
+.lms-auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.lms-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+/* Glassmorphism Navigation */
+.lms-glass-nav {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* Responsive Visibility Helpers */
+@media (max-width: 900px) {
+  .lms-hide-tablet {
+    display: none !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .lms-show-tablet {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .lms-hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Modern Form & Button Resets */
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Card Hover Elevation */
+.lms-card-interactive {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lms-card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.08);
+}

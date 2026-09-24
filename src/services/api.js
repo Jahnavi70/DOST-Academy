@@ -53,9 +53,14 @@ export const courseAPI = {
   update: (id, data) => api.put(`/courses/${id}`, data),
   delete: (id) => api.delete(`/courses/${id}`),
   approve: (id) => api.put(`/courses/${id}/approve`),
+  toggleStatus: (id) => api.put(`/courses/${id}/toggle-status`),
 };
 
 export const courseContentAPI = {
+  getByCourse: (courseId) => api.get(`/courses/${courseId}/contents`),
+  create: (courseId, data) => api.post(`/courses/${courseId}/contents`, data),
+  update: (id, data) => api.put(`/course-contents/${id}`, data),
+  delete: (id) => api.delete(`/course-contents/${id}`),
   complete: (id) => api.post(`/course-contents/${id}/complete`),
 };
 
@@ -93,12 +98,16 @@ export const assignmentAPI = {
   getOne: (id) => api.get(`/assignments/${id}`),
   create: (data) => api.post('/assignments', data),
   update: (id, data) => api.put(`/assignments/${id}`, data),
+  delete: (id) => api.delete(`/assignments/${id}`),
   submit: (id) => api.put(`/assignments/${id}/submit`),
 };
 
 export const certificateAPI = {
   getAll: () => api.get('/certificates'),
+  getOne: (id) => api.get(`/certificates/${id}`),
   generate: (data) => api.post('/certificates', data),
+  delete: (id) => api.delete(`/certificates/${id}`),
+  verify: (certNo) => api.get(`/certificates/verify/${certNo}`),
 };
 
 export const submissionAPI = {

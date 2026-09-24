@@ -29,6 +29,7 @@ Route::get('/curriculums', [CurriculumController::class, 'index']);
 Route::get('/curriculums/{id}', [CurriculumController::class, 'show']);
 Route::get('/courses', [CourseController::class, 'index']);
 Route::get('/courses/{id}', [CourseController::class, 'show']);
+Route::get('/certificates/verify/{certificate_number}', [CertificateController::class, 'verify']);
 
 Route::group(['middleware' => Authenticate::class], function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
@@ -60,7 +61,9 @@ Route::group(['middleware' => Authenticate::class], function () {
     Route::get('/assignments/{id}', [AssignmentController::class, 'show']);
     Route::put('/assignments/{id}/submit', [AssignmentController::class, 'submit']);
 
+    Route::get('/courses/{id}/contents', [CourseContentController::class, 'indexByCourse']);
     Route::get('/certificates', [CertificateController::class, 'index']);
+    Route::get('/certificates/{id}', [CertificateController::class, 'show']);
 
     Route::get('/submissions', [SubmissionController::class, 'index']);
     Route::get('/submissions/user', [SubmissionController::class, 'userSubmissions']);
@@ -109,10 +112,28 @@ Route::group(['middleware' => Authenticate::class], function () {
         Route::put('/admin/curriculums/{id}', [CurriculumController::class, 'update']);
         Route::delete('/admin/curriculums/{id}', [CurriculumController::class, 'destroy']);
 
-        // Admin monitoring for courses, certificates, and submissions
+        // Full Admin Course Management (Create, Edit, Toggle Status, Approve, Delete)
+        Route::post('/courses', [CourseController::class, 'store']);
+        Route::put('/courses/{id}', [CourseController::class, 'update']);
+        Route::put('/courses/{id}/toggle-status', [CourseController::class, 'toggleStatus']);
         Route::put('/courses/{id}/approve', [CourseController::class, 'approve']);
         Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
+
+        // Full Admin Course Contents / Lessons CRUD
+        Route::post('/courses/{courseId}/contents', [CourseContentController::class, 'store']);
+        Route::put('/course-contents/{id}', [CourseContentController::class, 'update']);
+        Route::delete('/course-contents/{id}', [CourseContentController::class, 'destroy']);
+
+        // Full Admin Assessments / Quizzes CRUD
+        Route::post('/assignments', [AssignmentController::class, 'store']);
+        Route::put('/assignments/{id}', [AssignmentController::class, 'update']);
+        Route::delete('/assignments/{id}', [AssignmentController::class, 'destroy']);
+
+        // Full Admin Certificates CRUD
         Route::post('/certificates', [CertificateController::class, 'store']);
+        Route::delete('/certificates/{id}', [CertificateController::class, 'destroy']);
+
+        // Admin Submissions & Grading
         Route::get('/admin/submissions', [SubmissionController::class, 'adminIndex']);
         Route::put('/submissions/{id}/grade', [SubmissionController::class, 'grade']);
     });

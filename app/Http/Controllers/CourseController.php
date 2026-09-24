@@ -70,24 +70,12 @@ class CourseController extends Controller {
     public function store(Request $request) {
         $user = $request->user();
 
-        // Admin does not create courses directly; mentors create courses for their assigned branch
-        if ($user->is_admin) {
-            return response()->json([
-                'error' => 'Administrators monitor and manage LMS users and curriculums. Courses must be created by mentors assigned to the branch.'
-            ], 403);
-        }
-
-        // Mentor must be assigned to a curriculum
-        if (!$user->curriculum_id) {
-            return response()->json([
-                'error' => 'You have not been assigned to a branch/curriculum yet. Please contact the administrator to assign your curriculum.'
-            ], 422);
-        }
-
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'duration' => 'required|string|max:100',
+            'curriculum_id' => $user->is_admin ? 'required|exists:curriculums,id' : 'nullable|exists:curriculums,id',
+            'mentor_id' => 'nullable|exists:users,id',
             'level' => 'nullable|string|in:Beginner,Intermediate,Advanced',
             'domain' => 'nullable|string|max:255',
             'image' => 'nullable|string',
@@ -96,26 +84,42 @@ class CourseController extends Controller {
             'assessments' => 'nullable|array',
         ]);
 
+        if ($user->is_admin) {
+            $curriculumId = $request->curriculum_id;
+            $mentorId = $request->mentor_id ?: null;
+            $curriculum = \App\Models\Curriculum::find($curriculumId);
+            $department = $curriculum ? $curriculum->title : 'Administration';
+        } else {
+            if (!$user->curriculum_id) {
+                return response()->json([
+                    'error' => 'You have not been assigned to a branch/curriculum yet. Please contact the administrator to assign your curriculum.'
+                ], 422);
+            }
+            $curriculumId = $user->curriculum_id;
+            $mentorId = $user->id;
+            $department = $user->curriculum ? $user->curriculum->title : ($user->department ?? 'General');
+        }
+
         $course = Course::create([
-            'curriculum_id' => $user->curriculum_id,
-            'mentor_id' => $user->id,
+            'curriculum_id' => $curriculumId,
+            'mentor_id' => $mentorId,
             'title' => $request->title,
             'description' => $request->description,
-            'department' => $user->curriculum ? $user->curriculum->title : ($user->department ?? 'General'),
-            'domain' => $request->domain ?? ($user->department ?? 'General'),
+            'department' => $department,
+            'domain' => $request->domain ?? $department,
             'duration' => $request->duration,
             'level' => $request->level ?? 'Beginner',
             'image' => $request->image,
             'status' => $request->status ?? 'published',
         ]);
 
-        // Process nested lessons if provided from multi-step wizard
+        // Process nested lessons if provided from multi-step wizard or admin form
         if ($request->has('lessons') && is_array($request->lessons)) {
             foreach ($request->lessons as $index => $lesson) {
                 if (!empty($lesson['title'])) {
                     CourseContent::create([
                         'course_id' => $course->id,
-                        'mentor_id' => $user->id,
+                        'mentor_id' => $mentorId,
                         'title' => $lesson['title'],
                         'description' => $lesson['description'] ?? null,
                         'content_type' => $lesson['content_type'] ?? 'lesson',
@@ -128,13 +132,13 @@ class CourseController extends Controller {
             }
         }
 
-        // Process nested assessments/quizzes if provided from multi-step wizard
+        // Process nested assessments/quizzes if provided
         if ($request->has('assessments') && is_array($request->assessments)) {
             foreach ($request->assessments as $assessment) {
                 if (!empty($assessment['title'])) {
                     Assignment::create([
                         'course_id' => $course->id,
-                        'mentor_id' => $user->id,
+                        'mentor_id' => $mentorId,
                         'title' => $assessment['title'],
                         'description' => $assessment['description'] ?? null,
                         'assessment_type' => $assessment['assessment_type'] ?? 'quiz',
@@ -146,7 +150,7 @@ class CourseController extends Controller {
             }
         }
 
-        return response()->json($course->load(['curriculum', 'contents', 'assignments']), 201);
+        return response()->json($course->load(['curriculum', 'mentor', 'contents', 'assignments']), 201);
     }
 
     public function update(Request $request, $id) {
@@ -161,13 +165,27 @@ class CourseController extends Controller {
             'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
             'duration' => 'sometimes|string|max:100',
+            'curriculum_id' => 'sometimes|nullable|exists:curriculums,id',
+            'mentor_id' => 'sometimes|nullable|exists:users,id',
             'level' => 'sometimes|string|in:Beginner,Intermediate,Advanced',
             'domain' => 'nullable|string|max:255',
             'image' => 'nullable|string',
             'status' => 'sometimes|in:draft,published',
         ]);
 
-        $course->update($request->only(['title', 'description', 'duration', 'level', 'domain', 'image', 'status']));
+        $updateData = $request->only(['title', 'description', 'duration', 'level', 'domain', 'image', 'status']);
+        if ($user->is_admin) {
+            if ($request->has('curriculum_id')) {
+                $updateData['curriculum_id'] = $request->curriculum_id;
+                $curriculum = \App\Models\Curriculum::find($request->curriculum_id);
+                if ($curriculum) $updateData['department'] = $curriculum->title;
+            }
+            if ($request->has('mentor_id')) {
+                $updateData['mentor_id'] = $request->mentor_id;
+            }
+        }
+
+        $course->update($updateData);
         return response()->json($course->fresh(['curriculum', 'mentor', 'contents', 'assignments']));
     }
 
@@ -187,5 +205,15 @@ class CourseController extends Controller {
         $course = Course::findOrFail($id);
         $course->update(['status' => 'published']);
         return response()->json(['message' => 'Course approved and published', 'course' => $course]);
+    }
+
+    public function toggleStatus($id) {
+        $course = Course::findOrFail($id);
+        $course->status = ($course->status === 'published') ? 'draft' : 'published';
+        $course->save();
+        return response()->json([
+            'message' => 'Course status updated to ' . $course->status,
+            'course' => $course->fresh(['curriculum', 'mentor'])
+        ]);
     }
 }

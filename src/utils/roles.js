@@ -100,6 +100,7 @@ export function functionalAdminNavItems() {
     { label: "Executive Analytics", path: "/executive-dashboard" },
     { label: "Branches", path: "/manage-curriculums" },
     { label: "Courses", path: "/manage-courses" },
+    { label: "Assessments", path: "/manage-assignments" },
     { label: "Certificates", path: "/manage-certificates" },
     { label: "Progress", path: "/progress-reports" },
   ];

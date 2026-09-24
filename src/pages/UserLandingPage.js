@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { curriculumAPI, recommendationAPI, enrollmentAPI } from "../services/api";
-import logo from "../assets/dost-logo.png";
+import LearnerHeader from "../components/layout/LearnerHeader";
 import slide1 from "../assets/hero-slide1.jpg";
 import slide2 from "../assets/hero-slide2.jpg";
 import slide3 from "../assets/hero-slide3.jpg";
@@ -13,8 +12,6 @@ const landingImages = [slide1, slide2, slide3];
 
 function UserLandingPage() {
   const navigate = useNavigate();
-  const { logout } = useAuth();
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [curriculums, setCurriculums] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
@@ -44,34 +41,10 @@ function UserLandingPage() {
 
   return (
     <div style={styles.page}>
-      <header style={styles.navbar}>
-        <div style={styles.logoSection}>
-          <img src={logo} alt="DOST Logo" style={styles.logo} />
-          <div><h2 style={styles.title}>DOST Academy</h2><p style={styles.subtitle}>Learning Management System</p></div>
-        </div>
-        <nav style={styles.navLinks}>
-          <button style={styles.homeButton} onClick={() => navigate("/user-home")}>Home</button>
-          <button style={styles.navButton} onClick={() => navigate("/dashboard")}>Dashboard</button>
-          <button style={styles.navButton} onClick={() => navigate("/courses")}>Courses</button>
-          <button style={styles.navButton} onClick={() => navigate("/assignments")}>Assignments</button>
-          <button style={styles.navButton} onClick={() => navigate("/certificates")}>Certificates</button>
-          <div style={styles.profileWrapper}>
-            <button style={styles.profileButton} onClick={() => setShowProfileMenu(!showProfileMenu)}>My Profile ▾</button>
-            {showProfileMenu && (
-              <div style={styles.dropdown}>
-                <p style={styles.dropdownItem} onClick={() => navigate("/dashboard")}>Dashboard</p>
-                <p style={styles.dropdownItem} onClick={() => navigate("/courses")}>Courses</p>
-                <p style={styles.dropdownItem} onClick={() => navigate("/assignments")}>Assignments</p>
-                <p style={styles.dropdownItem} onClick={() => navigate("/edit-profile")}>Edit Profile</p>
-                <p style={styles.dropdownItem} onClick={() => navigate("/certificates")}>Certificates</p>
-                <p style={styles.logoutItem} onClick={() => { logout(); navigate("/"); }}>Logout</p>
-              </div>
-            )}
-          </div>
-        </nav>
-      </header>
+      <LearnerHeader activeTab="home" />
 
-      <section style={styles.heroSection}>
+      <main className="lms-page-container" style={styles.main}>
+        <section style={styles.heroSection}>
         <div style={styles.carouselContainer}>
           <img src={landingImages[currentImage]} alt="DOST Academy" style={styles.carouselImage} />
           <div style={styles.dotsContainer}>
@@ -124,32 +97,33 @@ function UserLandingPage() {
           </section>
         </>
       )}
+      </main>
     </div>
   );
 }
 
 const styles = {
   page: { minHeight: "100vh", background: "linear-gradient(135deg, #EEF2FF, #F8FAFC)", fontFamily: "Arial", overflowX: "hidden" },
-  navbar: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 30px", backgroundColor: "#ffffff", borderBottom: "1px solid #E2E8F0", position: "sticky", top: 0, zIndex: 100, flexWrap: "wrap", gap: "12px" },
-  logoSection: { display: "flex", alignItems: "center", gap: "12px" }, logo: { width: "55px" }, title: { margin: 0, color: "#0B1F5E" }, subtitle: { margin: 0, color: "#64748B", fontSize: "13px" },
-  navLinks: { display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" },
-  homeButton: { backgroundColor: "#2563EB", color: "#ffffff", border: "none", padding: "9px 18px", borderRadius: "20px", cursor: "pointer", fontWeight: "600" },
-  navButton: { backgroundColor: "#EEF2FF", color: "#0B1F5E", border: "none", padding: "9px 14px", borderRadius: "20px", cursor: "pointer", fontWeight: "600" },
-  profileWrapper: { position: "relative" }, profileButton: { backgroundColor: "#0B1F5E", color: "#ffffff", border: "none", padding: "9px 14px", borderRadius: "20px", cursor: "pointer", fontWeight: "600" },
-  dropdown: { position: "absolute", right: 0, top: "45px", width: "190px", backgroundColor: "#ffffff", borderRadius: "12px", boxShadow: "0 8px 25px rgba(0,0,0,0.15)", padding: "10px", zIndex: 999 },
-  dropdownItem: { margin: 0, padding: "10px", cursor: "pointer", color: "#0B1F5E", borderRadius: "8px" }, logoutItem: { margin: 0, padding: "10px", cursor: "pointer", color: "#DC2626", fontWeight: "700", borderRadius: "8px" },
-  heroSection: { padding: "40px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "40px", alignItems: "center" },
-  carouselContainer: { position: "relative", borderRadius: "20px", overflow: "hidden" }, carouselImage: { width: "100%", height: "400px", objectFit: "cover" },
+  main: { maxWidth: "1600px", margin: "0 auto", padding: "clamp(16px, 2.5vw, 36px)", boxSizing: "border-box" },
+  heroSection: { padding: "20px 0 40px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "36px", alignItems: "center" },
+  carouselContainer: { position: "relative", borderRadius: "20px", overflow: "hidden", boxShadow: "0 8px 30px rgba(11, 31, 94, 0.1)" },
+  carouselImage: { width: "100%", height: "380px", objectFit: "cover" },
   dotsContainer: { position: "absolute", bottom: "15px", left: "50%", transform: "translateX(-50%)", display: "flex", gap: "8px" },
   dot: { width: "12px", height: "12px", borderRadius: "50%", cursor: "pointer" },
-  smallLabel: { color: "#2563EB", fontWeight: "700", fontSize: "14px" }, aboutTitle: { color: "#0B1F5E", fontSize: "32px", margin: "10px 0" }, aboutText: { color: "#64748B", lineHeight: "1.6" },
-  highlightBox: { backgroundColor: "#F0FDF4", padding: "15px 20px", borderRadius: "12px", margin: "20px 0", color: "#166534" },
-  primaryButton: { backgroundColor: "#2563EB", color: "#ffffff", border: "none", padding: "14px 28px", borderRadius: "12px", cursor: "pointer", fontWeight: "700", fontSize: "16px" },
-  sectionHeader: { padding: "10px 40px 0" }, sectionTitle: { color: "#0B1F5E", fontSize: "28px" },
-  cardsSection: { padding: "20px 40px 40px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "20px", boxSizing: "border-box" },
-  card: { backgroundColor: "#ffffff", padding: "18px", borderRadius: "18px", boxShadow: "0 4px 15px rgba(0,0,0,0.05)", cursor: "pointer", transition: "transform 0.3s", minWidth: 0, boxSizing: "border-box" },
-  cardImage: { width: "100%", height: "150px", objectFit: "cover", borderRadius: "14px", marginBottom: "12px" },
-  cardTitle: { color: "#0B1F5E", marginBottom: "8px", wordBreak: "break-word" }, cardText: { color: "#475569", fontSize: "14px", lineHeight: "1.5", marginBottom: "8px" }, cardMeta: { color: "#94A3B8", fontSize: "13px" },
+  aboutSection: { display: "flex", flexDirection: "column", gap: "10px" },
+  smallLabel: { color: "#2563EB", fontWeight: "700", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.5px", margin: 0 },
+  aboutTitle: { color: "#0B1F5E", fontSize: "32px", margin: "4px 0 10px", lineHeight: "1.25" },
+  aboutText: { color: "#64748B", lineHeight: "1.6", margin: 0 },
+  highlightBox: { backgroundColor: "#F0FDF4", padding: "16px 20px", borderRadius: "12px", margin: "16px 0", color: "#166534", border: "1px solid #BBF7D0", display: "flex", flexDirection: "column", gap: "6px" },
+  primaryButton: { backgroundColor: "#2563EB", color: "#ffffff", border: "none", padding: "14px 28px", borderRadius: "12px", cursor: "pointer", fontWeight: "700", fontSize: "16px", width: "fit-content", boxShadow: "0 4px 12px rgba(37, 99, 235, 0.2)" },
+  sectionHeader: { padding: "24px 0 12px" },
+  sectionTitle: { color: "#0B1F5E", fontSize: "26px", margin: 0, fontWeight: "800" },
+  cardsSection: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "24px", boxSizing: "border-box", paddingBottom: "36px" },
+  card: { backgroundColor: "#ffffff", padding: "18px", borderRadius: "18px", boxShadow: "0 4px 15px rgba(0,0,0,0.04)", border: "1px solid #E2E8F0", cursor: "pointer", transition: "transform 0.2s, box-shadow 0.2s", minWidth: 0, boxSizing: "border-box" },
+  cardImage: { width: "100%", height: "160px", objectFit: "cover", borderRadius: "14px", marginBottom: "12px" },
+  cardTitle: { color: "#0B1F5E", marginBottom: "8px", wordBreak: "break-word", fontSize: "17px", fontWeight: "700" },
+  cardText: { color: "#475569", fontSize: "13.5px", lineHeight: "1.5", marginBottom: "12px" },
+  cardMeta: { color: "#94A3B8", fontSize: "12px", fontWeight: "600" },
 };
 
 export default UserLandingPage;

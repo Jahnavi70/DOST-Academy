@@ -2,12 +2,12 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { mentorAPI } from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import MentorHeader from "../components/layout/MentorHeader";
 import logo from "../assets/dost-logo.png";
 
 function MentorDashboardPage() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
-  const [showMenu, setShowMenu] = useState(false);
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("courses"); // courses, enrollments, wizard, grading
   const [assignedCurriculum, setAssignedCurriculum] = useState(null);
@@ -279,33 +279,9 @@ function MentorDashboardPage() {
 
   return (
     <div style={styles.page}>
-      {/* Header */}
-      <header style={styles.navbar}>
-        <div style={styles.logoSection}>
-          <img src={logo} alt="DOST Logo" style={styles.logo} />
-          <div>
-            <h2 style={styles.title}>DOST Academy</h2>
-            <p style={styles.subtitle}>Teacher & Mentor Workspace</p>
-          </div>
-        </div>
-        <div style={styles.navLinks}>
-          <button style={styles.activeButton}>Mentor Workspace</button>
-          <button style={styles.navButton} onClick={() => navigate("/courses")}>Course Catalog</button>
-          <div style={styles.profileWrapper}>
-            <button style={styles.profileButton} onClick={() => setShowMenu(!showMenu)}>
-              {user?.name || "Mentor"} ▾
-            </button>
-            {showMenu && (
-              <div style={styles.dropdown}>
-                <p style={styles.dropdownItem} onClick={() => navigate("/edit-profile")}>Edit Profile</p>
-                <p style={styles.logoutItem} onClick={() => { logout(); navigate("/"); }}>Logout</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
+      <MentorHeader assignedBranch={assignedCurriculum?.title} />
 
-      <main style={styles.main}>
+      <main className="lms-page-container" style={styles.main}>
         {/* Mentor Branch Assignment Banner */}
         <section style={styles.branchBanner}>
           <div style={{ flex: 1 }}>
@@ -1118,8 +1094,7 @@ const styles = {
   profileButton: { backgroundColor: "#0B1F5E", color: "#ffffff", border: "none", padding: "8px 14px", borderRadius: "16px", cursor: "pointer", fontWeight: "600", fontSize: "13px" },
   dropdown: { position: "absolute", right: 0, top: "42px", width: "170px", backgroundColor: "#ffffff", borderRadius: "12px", boxShadow: "0 8px 25px rgba(0,0,0,0.15)", padding: "8px", zIndex: 999 },
   dropdownItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#0B1F5E", borderRadius: "6px", fontSize: "13px" },
-  logoutItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#DC2626", fontWeight: "700", borderRadius: "6px", fontSize: "13px" },
-  main: { padding: "30px", maxWidth: "1200px", margin: "0 auto" },
+  main: { padding: "clamp(16px, 2.5vw, 36px)", maxWidth: "1600px", margin: "0 auto", boxSizing: "border-box" },
   branchBanner: { backgroundColor: "#ffffff", borderRadius: "18px", padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "20px", boxShadow: "0 4px 15px rgba(0,0,0,0.04)", border: "1px solid #E2E8F0", marginBottom: "24px", flexWrap: "wrap" },
   branchTag: { fontSize: "11px", fontWeight: "700", color: "#2563EB", letterSpacing: "0.5px" },
   branchTitle: { color: "#0B1F5E", fontSize: "24px", margin: "6px 0 4px" },

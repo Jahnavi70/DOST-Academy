@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { assignmentAPI, submissionAPI } from "../services/api";
-import logo from "../assets/dost-logo.png";
+import LearnerHeader from "../components/layout/LearnerHeader";
 
 function AssignmentsPage() {
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [assignments, setAssignments] = useState([]);
   const [answers, setAnswers] = useState({});
   const [files, setFiles] = useState({});
@@ -68,33 +63,8 @@ function AssignmentsPage() {
 
   return (
     <div style={styles.page}>
-      <header style={styles.navbar}>
-        <div style={styles.logoSection}>
-          <img src={logo} alt="DOST Logo" style={styles.logo} />
-          <div><h2 style={styles.title}>DOST Academy</h2><p style={styles.subtitle}>Assignments</p></div>
-        </div>
-        <div style={styles.navSection}>
-          <div style={styles.navLinks}>
-            <button style={styles.navButton} onClick={() => navigate("/user-home")}>Home</button>
-            <button style={styles.navButton} onClick={() => navigate("/dashboard")}>Dashboard</button>
-            <button style={styles.navButton} onClick={() => navigate("/courses")}>Courses</button>
-            <button style={styles.activeButton}>Assignments</button>
-            <button style={styles.navButton} onClick={() => navigate("/certificates")}>Certificates</button>
-            <div style={styles.profileWrapper}>
-              <button style={styles.profileButton} onClick={() => setShowProfileMenu(!showProfileMenu)}>My Profile ▾</button>
-              {showProfileMenu && (
-                <div style={styles.dropdown}>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/dashboard")}>Dashboard</p>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/courses")}>Courses</p>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/edit-profile")}>Edit Profile</p>
-                  <p style={styles.logoutItem} onClick={() => { logout(); navigate("/"); }}>Logout</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
-      <main style={styles.main}>
+      <LearnerHeader activeTab="assignments" />
+      <main className="lms-page-container" style={styles.main}>
         <h1 style={styles.heading}>My Assignments</h1>
         {loading ? <p>Loading...</p> : assignments.length === 0 ? <p style={{color:'#64748B'}}>No assignments yet. Enroll in a course to see assignments.</p> : (
           <div style={styles.grid}>
@@ -155,15 +125,7 @@ function AssignmentsPage() {
 
 const styles = {
   page: { minHeight: "100vh", background: "#F1F5F9", fontFamily: "Arial" },
-  navbar: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 30px", backgroundColor: "#ffffff", borderBottom: "1px solid #E2E8F0", flexWrap: "wrap", gap: "15px", position: "sticky", top: 0, zIndex: 100 },
-  logoSection: { display: "flex", alignItems: "center", gap: "12px" }, logo: { width: "55px" }, title: { margin: 0, color: "#0B1F5E" }, subtitle: { margin: 0, color: "#64748B", fontSize: "13px" },
-  navSection: { display: "flex", alignItems: "center", gap: "15px", flexWrap: "wrap" }, navLinks: { display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" },
-  navButton: { backgroundColor: "#EEF2FF", color: "#0B1F5E", border: "none", padding: "9px 14px", borderRadius: "20px", cursor: "pointer", fontWeight: "600" },
-  activeButton: { backgroundColor: "#2563EB", color: "#ffffff", border: "none", padding: "9px 14px", borderRadius: "20px", cursor: "pointer", fontWeight: "600" },
-  profileWrapper: { position: "relative" }, profileButton: { backgroundColor: "#0B1F5E", color: "#ffffff", border: "none", padding: "9px 14px", borderRadius: "20px", cursor: "pointer", fontWeight: "600" },
-  dropdown: { position: "absolute", right: 0, top: "45px", width: "190px", backgroundColor: "#ffffff", borderRadius: "12px", boxShadow: "0 8px 25px rgba(0,0,0,0.15)", padding: "10px", zIndex: 999 },
-  dropdownItem: { margin: 0, padding: "10px", cursor: "pointer", color: "#0B1F5E", borderRadius: "8px" }, logoutItem: { margin: 0, padding: "10px", cursor: "pointer", color: "#DC2626", fontWeight: "700", borderRadius: "8px" },
-  main: { padding: "30px" }, heading: { color: "#0B1F5E", fontSize: "32px", marginBottom: "25px" },
+  main: { maxWidth: "1600px", margin: "0 auto", padding: "clamp(16px, 2.5vw, 36px)", boxSizing: "border-box" }, heading: { color: "#0B1F5E", fontSize: "32px", marginBottom: "25px" },
   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px" },
   card: { backgroundColor: "#ffffff", padding: "24px", borderRadius: "18px", boxShadow: "0 4px 15px rgba(0,0,0,0.05)" },
   cardTitle: { color: "#0B1F5E", margin: "0 0 8px", fontSize: "18px" }, cardText: { color: "#475569", fontSize: "14px", lineHeight: "1.5", marginBottom: "8px" }, cardMeta: { color: "#64748B", fontSize: "13px", marginBottom: "4px" },

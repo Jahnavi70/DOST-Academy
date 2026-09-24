@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import AdminHeader from "../components/layout/AdminHeader";
 import { curriculumAPI } from "../services/api";
-import logo from "../assets/dost-logo.png";
 
 function ManageCurriculumsPage() {
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-  const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [curriculums, setCurriculums] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -93,38 +88,9 @@ function ManageCurriculumsPage() {
 
   return (
     <div style={styles.page}>
-      <header style={styles.navbar}>
-        <div style={styles.logoSection}>
-          <img src={logo} alt="DOST Logo" style={styles.logo} />
-          <div>
-            <h2 style={styles.title}>DOST Academy</h2>
-            <p style={styles.subtitle}>Branch & Curriculum Management</p>
-          </div>
-        </div>
-        <div style={styles.navSection}>
-          <div style={styles.navLinks}>
-            <button style={styles.navButton} onClick={() => navigate("/admin-dashboard")}>Dashboard</button>
-            <button style={styles.navButton} onClick={() => navigate("/manage-users")}>Users & Mentors</button>
-            <button style={styles.activeButton}>Curriculums / Branches</button>
-            <button style={styles.navButton} onClick={() => navigate("/manage-courses")}>Courses (Monitor)</button>
-            <button style={styles.navButton} onClick={() => navigate("/progress-reports")}>Reports</button>
-            <div style={styles.profileWrapper}>
-              <button style={styles.profileButton} onClick={() => setShowAdminMenu(!showAdminMenu)}>Admin ▾</button>
-              {showAdminMenu && (
-                <div style={styles.dropdown}>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/admin-dashboard")}>Dashboard</p>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/manage-users")}>Users & Mentors</p>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/manage-curriculums")}>Branches</p>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/manage-courses")}>Courses Monitor</p>
-                  <p style={styles.logoutItem} onClick={() => { logout(); navigate("/"); }}>Logout</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <AdminHeader activePortal="functional" />
 
-      <main style={styles.main}>
+      <main className="lms-page-container" style={styles.main}>
         <div style={styles.headerRow}>
           <div>
             <h1 style={styles.heading}>Branches & Curriculums</h1>
@@ -288,7 +254,7 @@ const styles = {
   dropdown: { position: "absolute", right: 0, top: "42px", width: "180px", backgroundColor: "#ffffff", borderRadius: "12px", boxShadow: "0 8px 25px rgba(0,0,0,0.15)", padding: "8px", zIndex: 999 },
   dropdownItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#0B1F5E", borderRadius: "6px", fontSize: "13px" },
   logoutItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#DC2626", fontWeight: "700", borderRadius: "6px", fontSize: "13px" },
-  main: { padding: "30px", maxWidth: "1200px", margin: "0 auto" },
+  main: { padding: "clamp(16px, 2.5vw, 36px)", maxWidth: "1600px", margin: "0 auto", width: "100%", boxSizing: "border-box" },
   headerRow: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "20px", marginBottom: "28px" },
   heading: { color: "#0B1F5E", fontSize: "28px", margin: "0 0 6px" },
   subtext: { color: "#64748B", margin: 0, maxWidth: "750px", fontSize: "14px", lineHeight: "1.5" },

@@ -640,13 +640,14 @@ const styles = {
     boxShadow: "0 2px 8px rgba(15, 23, 42, 0.04)",
   },
   navContainer: {
-    maxWidth: "1240px",
+    maxWidth: "1600px",
     margin: "0 auto",
-    padding: "12px 24px",
+    padding: "12px clamp(16px, 2.5vw, 36px)",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     gap: "20px",
+    boxSizing: "border-box",
   },
   brand: {
     display: "flex",
@@ -758,13 +759,15 @@ const styles = {
     overflow: "hidden",
   },
   heroContainer: {
-    maxWidth: "1240px",
+    maxWidth: "1600px",
     margin: "0 auto",
+    padding: "0 clamp(16px, 2.5vw, 36px)",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     gap: "48px",
     flexWrap: "wrap",
+    boxSizing: "border-box",
   },
   heroContent: {
     flex: "1 1 540px",
@@ -968,12 +971,16 @@ const styles = {
     flexWrap: "wrap",
   },
   branchesSection: {
-    padding: "64px 24px",
-    maxWidth: "1240px",
+    padding: "64px clamp(16px, 2.5vw, 36px)",
+    maxWidth: "1600px",
     margin: "0 auto",
+    boxSizing: "border-box",
   },
   sectionContainer: {
     width: "100%",
+    maxWidth: "1600px",
+    margin: "0 auto",
+    boxSizing: "border-box",
   },
   sectionHeader: {
     display: "flex",
@@ -1156,9 +1163,10 @@ const styles = {
     margin: 0,
   },
   featuresSection: {
-    padding: "72px 24px",
-    maxWidth: "1240px",
+    padding: "72px clamp(16px, 2.5vw, 36px)",
+    maxWidth: "1600px",
     margin: "0 auto",
+    boxSizing: "border-box",
   },
   featuresGrid: {
     display: "grid",
