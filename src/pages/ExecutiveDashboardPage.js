@@ -38,7 +38,7 @@ export default function ExecutiveDashboardPage() {
     <div style={styles.container}>
       <AdminHeader activePortal="functional" />
 
-      <main style={styles.content}>
+      <main className="lms-page-container" style={styles.content}>
         {/* Title & Filter Bar */}
         <div style={styles.topSection}>
           <div>
@@ -173,9 +173,11 @@ const styles = {
     backgroundColor: "#F8FAFC",
   },
   content: {
-    maxWidth: "1380px",
-    margin: "0 auto",
-    padding: "28px 24px 60px",
+    width: "100%",
+    maxWidth: "100%",
+    margin: "0",
+    padding: "clamp(20px, 3vw, 48px) clamp(20px, 3vw, 48px) 60px",
+    boxSizing: "border-box",
   },
   topSection: {
     display: "flex",
@@ -260,8 +262,9 @@ const styles = {
     marginBottom: "6px",
   },
   kpiVal: {
-    fontSize: "24px",
+    fontSize: "36px",
     fontWeight: "800",
+    letterSpacing: "-0.02em",
     color: "#0B1F5E",
   },
   kpiPill: {

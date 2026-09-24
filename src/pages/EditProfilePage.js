@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { authAPI, progressAPI } from "../services/api";
-import { roleHome } from "../utils/roles";
-import logo from "../assets/dost-logo.png";
+import AppHeader from "../components/layout/AppHeader";
 
 function EditProfilePage() {
-  const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [formData, setFormData] = useState({ name: '', department: '', bio: '' });
   const [enrollments, setEnrollments] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -36,17 +33,8 @@ function EditProfilePage() {
 
   return (
     <div style={styles.page}>
-      <header style={styles.navbar}>
-        <div style={styles.logoSection}>
-          <img src={logo} alt="DOST Logo" style={styles.logo} />
-          <div><h2 style={styles.title}>DOST Academy</h2><p style={styles.subtitle}>Edit Profile</p></div>
-        </div>
-        <div style={{display:'flex', gap:10, alignItems:'center'}}>
-          <button style={styles.homeButton} onClick={() => navigate(roleHome(user?.role))}>Dashboard</button>
-          <button style={{...styles.homeButton, backgroundColor:'#DC2626'}} onClick={() => { logout(); navigate("/"); }}>Logout</button>
-        </div>
-      </header>
-      <main style={styles.container}>
+      <AppHeader />
+      <main className="lms-page-container" style={styles.container}>
         <section style={styles.profileCard}>
           <h1 style={styles.heading}>Edit Profile</h1>
           <p style={styles.text}>Manage your basic details and learning information.</p>
@@ -79,10 +67,7 @@ function EditProfilePage() {
 
 const styles = {
   page: { minHeight: "100vh", background: "#F1F5F9", fontFamily: "Arial" },
-  navbar: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 30px", backgroundColor: "#ffffff", borderBottom: "1px solid #E2E8F0", position: "sticky", top: 0, zIndex: 100 },
-  logoSection: { display: "flex", alignItems: "center", gap: "12px" }, logo: { width: "55px" }, title: { margin: 0, color: "#0B1F5E" }, subtitle: { margin: 0, color: "#64748B", fontSize: "13px" },
-  homeButton: { backgroundColor: "#2563EB", color: "#ffffff", border: "none", padding: "10px 20px", borderRadius: "10px", cursor: "pointer", fontWeight: "600" },
-  container: { padding: "30px", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "30px" },
+  container: { width: "100%", maxWidth: "100%", margin: "0", padding: "clamp(20px, 3vw, 48px)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "24px", boxSizing: "border-box" },
   profileCard: { backgroundColor: "#ffffff", padding: "32px", borderRadius: "24px", boxShadow: "0 6px 22px rgba(0,0,0,0.05)" },
   courseCard: { backgroundColor: "#ffffff", padding: "32px", borderRadius: "24px", boxShadow: "0 6px 22px rgba(0,0,0,0.05)" },
   heading: { color: "#0B1F5E", fontSize: "28px", marginBottom: "8px" }, text: { color: "#64748B", marginBottom: "20px" },

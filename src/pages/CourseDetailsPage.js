@@ -3,19 +3,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { courseAPI, courseContentAPI, enrollmentAPI, progressAPI } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { roleHome } from "../utils/roles";
-import logo from "../assets/dost-logo.png";
+import AppHeader from "../components/layout/AppHeader";
 import courseDefault from "../assets/course-default.jpg";
 
 function CourseDetailsPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [course, setCourse] = useState(null);
   const [enrollments, setEnrollments] = useState([]);
   const [progressItems, setProgressItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!id) {
@@ -106,7 +105,7 @@ function CourseDetailsPage() {
 
   if (!id) {
     return (
-      <Shell user={user} logout={logout} showMenu={showMenu} setShowMenu={setShowMenu} navigate={navigate}>
+      <Shell>
         <div style={styles.emptyCard}>
           <h1 style={styles.heading}>Select a Course</h1>
           <p style={styles.text}>Open a course from the catalog to view its mentor, assignments, requirements, and learning path.</p>
@@ -117,15 +116,15 @@ function CourseDetailsPage() {
   }
 
   if (loading) {
-    return <Shell user={user} logout={logout} showMenu={showMenu} setShowMenu={setShowMenu} navigate={navigate}><p style={styles.loading}>Loading course details...</p></Shell>;
+    return <Shell><p style={styles.loading}>Loading course details...</p></Shell>;
   }
 
   if (!course) {
-    return <Shell user={user} logout={logout} showMenu={showMenu} setShowMenu={setShowMenu} navigate={navigate}><p style={styles.loading}>Course not found.</p></Shell>;
+    return <Shell><p style={styles.loading}>Course not found.</p></Shell>;
   }
 
   return (
-    <Shell user={user} logout={logout} showMenu={showMenu} setShowMenu={setShowMenu} navigate={navigate}>
+    <Shell>
       <nav style={styles.breadcrumb}>
         <button style={styles.crumbButton} onClick={() => navigate(roleHome(user?.role))}>Home</button>
         <span>/</span>
@@ -147,7 +146,15 @@ function CourseDetailsPage() {
           </div>
         </div>
         <aside style={styles.actionPanel}>
-          <img src={course.image || courseDefault} alt={course.title} style={styles.coverImage} />
+          <img
+            src={course.image || courseDefault}
+            alt={course.title}
+            style={styles.coverImage}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = courseDefault;
+            }}
+          />
           <div style={styles.mentorBox}>
             <p style={styles.kicker}>Assigned Course Mentor</p>
             <h3 style={styles.mentorName}>🧑‍🏫 {course.mentor?.name || "Mentor pending assignment"}</h3>
@@ -314,31 +321,11 @@ function CourseDetailsPage() {
   );
 }
 
-function Shell({ children, user, logout, showMenu, setShowMenu, navigate }) {
-  const role = user?.role || "employee";
+function Shell({ children }) {
   return (
     <div style={styles.page}>
-      <header style={styles.navbar}>
-        <div style={styles.logoSection}>
-          <img src={logo} alt="DOST Logo" style={styles.logo} />
-          <div><h2 style={styles.title}>DOST Academy</h2><p style={styles.subtitle}>Course Syllabus</p></div>
-        </div>
-        <div style={styles.navLinks}>
-          <button style={styles.navButton} onClick={() => navigate(roleHome(role))}>Dashboard</button>
-          <button style={styles.navButton} onClick={() => navigate("/courses")}>Courses</button>
-          <div style={styles.profileWrapper}>
-            <button style={styles.profileButton} onClick={() => setShowMenu(!showMenu)}>{user?.name || "User"} ▾</button>
-            {showMenu && (
-              <div style={styles.dropdown}>
-                <p style={styles.dropdownItem} onClick={() => navigate(roleHome(role))}>Dashboard</p>
-                <p style={styles.dropdownItem} onClick={() => navigate("/edit-profile")}>Edit Profile</p>
-                <p style={styles.logoutItem} onClick={() => { logout(); navigate("/"); }}>Logout</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
-      <main style={styles.main}>{children}</main>
+      <AppHeader />
+      <main className="lms-page-container" style={styles.main}>{children}</main>
     </div>
   );
 }
@@ -366,22 +353,10 @@ function buildOutcomes(course) {
 
 const styles = {
   page: { minHeight: "100vh", background: "#F8FAFC", fontFamily: "Arial, sans-serif" },
-  navbar: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 28px", backgroundColor: "#ffffff", borderBottom: "1px solid #E2E8F0", position: "sticky", top: 0, zIndex: 100, gap: "15px", flexWrap: "wrap" },
-  logoSection: { display: "flex", alignItems: "center", gap: "12px" },
-  logo: { width: "50px" },
-  title: { margin: 0, color: "#0B1F5E", fontSize: "20px" },
-  subtitle: { margin: 0, color: "#64748B", fontSize: "13px" },
-  navLinks: { display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" },
-  navButton: { backgroundColor: "#EEF2FF", color: "#0B1F5E", border: "none", padding: "8px 14px", borderRadius: "16px", cursor: "pointer", fontWeight: "600", fontSize: "13px" },
-  profileWrapper: { position: "relative" },
-  profileButton: { backgroundColor: "#0B1F5E", color: "#ffffff", border: "none", padding: "8px 14px", borderRadius: "16px", cursor: "pointer", fontWeight: "600", fontSize: "13px" },
-  dropdown: { position: "absolute", right: 0, top: "42px", width: "170px", backgroundColor: "#ffffff", borderRadius: "12px", boxShadow: "0 8px 25px rgba(0,0,0,0.15)", padding: "8px", zIndex: 999 },
-  dropdownItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#0B1F5E", borderRadius: "6px", fontSize: "13px" },
-  logoutItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#DC2626", fontWeight: "700", borderRadius: "6px", fontSize: "13px" },
-  main: { padding: "28px", maxWidth: "1240px", margin: "0 auto" },
+  main: { padding: "clamp(20px, 3vw, 48px)", width: "100%", maxWidth: "100%", margin: "0", boxSizing: "border-box" },
   breadcrumb: { display: "flex", gap: "8px", alignItems: "center", color: "#64748B", marginBottom: "20px", flexWrap: "wrap", fontSize: "13px" },
   crumbButton: { border: "none", background: "transparent", color: "#2563EB", cursor: "pointer", padding: 0, fontWeight: "700" },
-  hero: { display: "grid", gridTemplateColumns: "minmax(0, 1fr) 360px", gap: "24px", marginBottom: "24px" },
+  hero: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "24px", marginBottom: "24px" },
   heroContent: { backgroundColor: "#ffffff", borderRadius: "18px", padding: "28px", boxShadow: "0 4px 15px rgba(0,0,0,0.03)", border: "1px solid #E2E8F0" },
   badge: { display: "inline-block", backgroundColor: "#EEF2FF", color: "#2563EB", borderRadius: "8px", padding: "4px 10px", fontWeight: "700", fontSize: "12px" },
   heroTitle: { color: "#0B1F5E", fontSize: "32px", margin: "14px 0 10px" },
@@ -401,7 +376,7 @@ const styles = {
   pendingCard: { backgroundColor: "#FFFBEB", border: "1px solid #FCD34D", borderRadius: "10px", padding: "12px", display: "flex", gap: "10px", alignItems: "flex-start" },
   primaryButton: { backgroundColor: "#2563EB", color: "#ffffff", border: "none", padding: "11px 16px", borderRadius: "8px", cursor: "pointer", fontWeight: "700", fontSize: "13px" },
   secondaryButton: { backgroundColor: "#EEF2FF", color: "#0B1F5E", border: "none", padding: "11px 16px", borderRadius: "8px", cursor: "pointer", fontWeight: "700", fontSize: "13px" },
-  contentGrid: { display: "grid", gridTemplateColumns: "minmax(0, 1fr) 340px", gap: "24px" },
+  contentGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "24px" },
   sideColumn: { display: "grid", gap: "18px", alignContent: "start" },
   panel: { backgroundColor: "#ffffff", borderRadius: "16px", padding: "22px", boxShadow: "0 4px 15px rgba(0,0,0,0.03)", border: "1px solid #E2E8F0", marginBottom: "18px" },
   panelTitle: { color: "#0B1F5E", margin: "0 0 14px", fontSize: "20px" },

@@ -1,70 +1,137 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import AdminHeader from "../components/layout/AdminHeader";
 import { adminAPI } from "../services/api";
-import logo from "../assets/dost-logo.png";
 
 function ProgressReportsPage() {
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-  const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
-  useEffect(() => { loadReports(); }, []);
+  useEffect(() => {
+    loadReports();
+  }, []);
 
   const loadReports = async () => {
-    try { const res = await adminAPI.allProgress(); setReports(res.data); }
-    catch (err) { console.error(err); }
-    setLoading(false);
+    try {
+      const res = await adminAPI.allProgress();
+      setReports(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const filteredReports = reports.filter((r) => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    const matchUser = r.user?.name && r.user.name.toLowerCase().includes(q);
+    const matchDept = r.user?.department && r.user.department.toLowerCase().includes(q);
+    const matchCourse = r.course?.title && r.course.title.toLowerCase().includes(q);
+    const matchCurriculum = r.curriculum?.title && r.curriculum.title.toLowerCase().includes(q);
+    return matchUser || matchDept || matchCourse || matchCurriculum;
+  });
+
   return (
-    <div style={styles.page}>
-      <header style={styles.navbar}>
-        <div style={styles.logoSection}>
-          <img src={logo} alt="DOST Logo" style={styles.logo} />
-          <div><h2 style={styles.title}>DOST Academy</h2><p style={styles.subtitle}>Progress Reports</p></div>
-        </div>
-        <div style={styles.navSection}>
-          <div style={styles.navLinks}>
-            <button style={styles.navButton} onClick={() => navigate("/admin-dashboard")}>Dashboard</button>
-            <button style={styles.navButton} onClick={() => navigate("/manage-users")}>Users</button>
-            <button style={styles.navButton} onClick={() => navigate("/manage-courses")}>Courses</button>
-            <button style={styles.navButton} onClick={() => navigate("/manage-assignments")}>Assignments</button>
-            <button style={styles.navButton} onClick={() => navigate("/manage-certificates")}>Certificates</button>
-            <button style={styles.activeButton}>Reports</button>
-            <div style={styles.profileWrapper}>
-              <button style={styles.profileButton} onClick={() => setShowAdminMenu(!showAdminMenu)}>Admin ▾</button>
-              {showAdminMenu && (
-                <div style={styles.dropdown}>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/admin-dashboard")}>Dashboard</p>
-                  <p style={styles.logoutItem} onClick={() => { logout(); navigate("/"); }}>Logout</p>
-                </div>
-              )}
+    <div style={{ minHeight: "100vh", backgroundColor: "#F8FAFC" }}>
+      <AdminHeader activePortal="functional" />
+
+      <main className="lms-page-container">
+        <div style={styles.headerRow}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <span style={{ fontSize: "28px" }}>📊</span>
+              <h1 style={styles.heading}>Employee Progress & Completion Reports</h1>
             </div>
+            <p style={styles.subtext}>
+              Granular auditing of learner engagement, milestone completions, syllabus velocities, and earned credentials across all DOST agency institutes.
+            </p>
           </div>
         </div>
-      </header>
-      <main style={styles.main}>
-        <h1 style={styles.heading}>Employee Progress Reports</h1>
-        {loading ? <p>Loading...</p> : reports.length === 0 ? <p style={{color:'#64748B'}}>No progress data available.</p> : (
+
+        {/* Search Bar */}
+        <div style={styles.filterToolbar}>
+          <input
+            style={styles.search}
+            placeholder="🔍 Search employee name, department, branch, or course..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <div style={{ fontSize: "13px", fontWeight: "600", color: "#64748B" }}>
+            Total Audit Records: {filteredReports.length}
+          </div>
+        </div>
+
+        {loading ? (
+          <p style={{ textAlign: "center", padding: "40px", color: "#64748B" }}>Loading progress telemetry...</p>
+        ) : filteredReports.length === 0 ? (
+          <div style={styles.emptyCard}>
+            <span style={{ fontSize: "40px" }}>📈</span>
+            <h3 style={{ margin: "10px 0 4px", color: "#0B1F5E" }}>No Progress Records Found</h3>
+            <p style={{ color: "#64748B", maxWidth: "450px", margin: "0 auto" }}>
+              {search ? "No records match the search term." : "Once employees begin completing course modules and assessments, their milestones will be logged here."}
+            </p>
+          </div>
+        ) : (
           <div style={styles.tableContainer}>
             <table style={styles.table}>
-              <thead><tr><th style={styles.th}>Employee</th><th style={styles.th}>Department</th><th style={styles.th}>Curriculum</th><th style={styles.th}>Course</th><th style={styles.th}>Avg Progress</th><th style={styles.th}>Enrollment</th><th style={styles.th}>Certificate</th></tr></thead>
+              <thead>
+                <tr>
+                  <th style={styles.th}>Employee / Trainee</th>
+                  <th style={styles.th}>Agency Department</th>
+                  <th style={styles.th}>Curriculum Branch</th>
+                  <th style={styles.th}>Course Enrolled</th>
+                  <th style={styles.th}>Syllabus Progress</th>
+                  <th style={styles.th}>Enrollment Status</th>
+                  <th style={styles.th}>Credential</th>
+                </tr>
+              </thead>
               <tbody>
-                {reports.map((r, i) => (
-                  <tr key={i} style={i % 2 === 0 ? {backgroundColor:'#F8FAFC'} : {}}>
-                    <td style={styles.td}>{r.user?.name}</td><td style={styles.td}>{r.user?.department || '-'}</td><td style={styles.td}>{r.curriculum?.title}</td>
-                    <td style={styles.td}>{r.course?.title || 'All curriculum courses'}</td>
+                {filteredReports.map((r, i) => (
+                  <tr key={i} style={i % 2 === 0 ? { backgroundColor: "#FFFFFF" } : { backgroundColor: "#F8FAFC" }}>
                     <td style={styles.td}>
-                      <div style={{display:'flex',alignItems:'center',gap:8}}>
-                        <div style={{flex:1,height:8,backgroundColor:'#E5E7EB',borderRadius:10,overflow:'hidden'}}><div style={{height:'100%',width:`${r.average_progress}%`,backgroundColor:'#2563EB',borderRadius:10}} /></div>
-                        <strong>{r.average_progress}%</strong>
+                      <strong style={{ color: "#0F172A" }}>{r.user?.name || "Trainee"}</strong>
+                      <div style={{ fontSize: "11px", color: "#64748B" }}>{r.user?.email}</div>
+                    </td>
+                    <td style={styles.td}>
+                      <span style={styles.deptBadge}>{r.user?.department || "DOST Agency"}</span>
+                    </td>
+                    <td style={styles.td}>{r.curriculum?.title || "DOST Branch"}</td>
+                    <td style={styles.td}>{r.course?.title || "All curriculum courses"}</td>
+                    <td style={styles.td}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <div style={styles.progressBarBg}>
+                          <div
+                            style={{
+                              ...styles.progressBarFill,
+                              width: `${r.progress ?? 0}%`,
+                              backgroundColor: (r.progress ?? 0) >= 100 ? "#10B981" : "#2563EB",
+                            }}
+                          />
+                        </div>
+                        <span style={{ fontWeight: 700, fontSize: "12px", color: (r.progress ?? 0) >= 100 ? "#059669" : "#2563EB" }}>
+                          {r.progress ?? 0}%
+                        </span>
                       </div>
                     </td>
-                    <td style={styles.td}><span style={{...styles.badge, backgroundColor: r.enrollment_status === 'completed' ? '#D1FAE5' : r.enrollment_status === 'in_progress' ? '#DBEAFE' : '#FEF3C7', color: r.enrollment_status === 'completed' ? '#065F46' : r.enrollment_status === 'in_progress' ? '#1D4ED8' : '#92400E'}}>{r.enrollment_status}</span></td>
-                    <td style={styles.td}><span style={{...styles.badge, backgroundColor: r.certificate_status === 'Issued' ? '#D1FAE5' : '#F1F5F9', color: r.certificate_status === 'Issued' ? '#065F46' : '#475569'}}>{r.certificate_status}</span></td>
+                    <td style={styles.td}>
+                      <span
+                        style={{
+                          ...styles.badge,
+                          backgroundColor: r.status === "completed" ? "#DCFCE7" : r.status === "in_progress" ? "#DBEAFE" : "#FEF3C7",
+                          color: r.status === "completed" ? "#166534" : r.status === "in_progress" ? "#1E40AF" : "#92400E",
+                        }}
+                      >
+                        {r.status || "enrolled"}
+                      </span>
+                    </td>
+                    <td style={styles.td}>
+                      {r.has_certificate ? (
+                        <span style={styles.certPill}>🎓 {r.certificate_number || "Issued"}</span>
+                      ) : (
+                        <span style={{ color: "#94A3B8", fontSize: "12px" }}>—</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -77,21 +144,114 @@ function ProgressReportsPage() {
 }
 
 const styles = {
-  page: { minHeight: "100vh", background: "#F1F5F9", fontFamily: "Arial" },
-  navbar: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 30px", backgroundColor: "#ffffff", borderBottom: "1px solid #E2E8F0", flexWrap: "wrap", gap: "15px", position: "sticky", top: 0, zIndex: 100 },
-  logoSection: { display: "flex", alignItems: "center", gap: "12px" }, logo: { width: "55px" }, title: { margin: 0, color: "#0B1F5E" }, subtitle: { margin: 0, color: "#64748B", fontSize: "13px" },
-  navSection: { display: "flex", alignItems: "center", gap: "15px", flexWrap: "wrap" }, navLinks: { display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" },
-  navButton: { backgroundColor: "#EEF2FF", color: "#0B1F5E", border: "none", padding: "9px 14px", borderRadius: "20px", cursor: "pointer", fontWeight: "600" },
-  activeButton: { backgroundColor: "#2563EB", color: "#ffffff", border: "none", padding: "9px 14px", borderRadius: "20px", cursor: "pointer", fontWeight: "600" },
-  profileWrapper: { position: "relative" }, profileButton: { backgroundColor: "#0B1F5E", color: "#ffffff", border: "none", padding: "9px 14px", borderRadius: "20px", cursor: "pointer", fontWeight: "600" },
-  dropdown: { position: "absolute", right: 0, top: "45px", width: "190px", backgroundColor: "#ffffff", borderRadius: "12px", boxShadow: "0 8px 25px rgba(0,0,0,0.15)", padding: "10px", zIndex: 999 },
-  dropdownItem: { margin: 0, padding: "10px", cursor: "pointer", color: "#0B1F5E", borderRadius: "8px" }, logoutItem: { margin: 0, padding: "10px", cursor: "pointer", color: "#DC2626", fontWeight: "700", borderRadius: "8px" },
-  main: { padding: "30px" }, heading: { color: "#0B1F5E", fontSize: "32px", marginBottom: "25px" },
-  tableContainer: { backgroundColor: "#ffffff", borderRadius: "18px", overflow: "hidden", boxShadow: "0 4px 15px rgba(0,0,0,0.05)" },
-  table: { width: "100%", borderCollapse: "collapse" },
-  th: { backgroundColor: "#0B1F5E", color: "#ffffff", padding: "14px 18px", textAlign: "left", fontWeight: "600" },
-  td: { padding: "14px 18px", borderBottom: "1px solid #E2E8F0", color: "#475569" },
-  badge: { padding: "4px 12px", borderRadius: "12px", fontWeight: "600", fontSize: "13px" },
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "24px",
+    flexWrap: "wrap",
+    gap: "16px",
+  },
+  heading: {
+    margin: 0,
+    fontSize: "26px",
+    fontWeight: "700",
+    color: "#0B1F5E",
+    letterSpacing: "-0.02em",
+  },
+  subtext: {
+    margin: "6px 0 0",
+    fontSize: "14px",
+    color: "#64748B",
+    maxWidth: "800px",
+  },
+  filterToolbar: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    padding: "14px 18px",
+    borderRadius: "16px",
+    border: "1px solid #E2E8F0",
+    marginBottom: "24px",
+    gap: "16px",
+    flexWrap: "wrap",
+  },
+  search: {
+    padding: "8px 14px",
+    borderRadius: "10px",
+    border: "1px solid #CBD5E1",
+    fontSize: "13px",
+    width: "380px",
+    backgroundColor: "#F8FAFC",
+  },
+  tableContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "16px",
+    border: "1px solid #E2E8F0",
+    overflow: "hidden",
+    boxShadow: "0 4px 16px rgba(15, 23, 42, 0.04)",
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+    fontSize: "13px",
+  },
+  th: {
+    backgroundColor: "#F8FAFC",
+    color: "#475569",
+    padding: "14px 18px",
+    textAlign: "left",
+    fontWeight: "600",
+    borderBottom: "1px solid #E2E8F0",
+  },
+  td: {
+    padding: "14px 18px",
+    borderBottom: "1px solid #F1F5F9",
+    color: "#334155",
+  },
+  deptBadge: {
+    fontSize: "11px",
+    fontWeight: "600",
+    color: "#2563EB",
+    backgroundColor: "#EFF6FF",
+    padding: "3px 8px",
+    borderRadius: "8px",
+  },
+  progressBarBg: {
+    width: "90px",
+    height: "8px",
+    borderRadius: "4px",
+    backgroundColor: "#E2E8F0",
+    overflow: "hidden",
+  },
+  progressBarFill: {
+    height: "100%",
+    borderRadius: "4px",
+    transition: "width 0.3s ease",
+  },
+  badge: {
+    padding: "4px 10px",
+    borderRadius: "10px",
+    fontWeight: "600",
+    fontSize: "12px",
+    textTransform: "capitalize",
+  },
+  certPill: {
+    fontSize: "11px",
+    fontWeight: "700",
+    color: "#059669",
+    backgroundColor: "#ECFDF5",
+    padding: "3px 8px",
+    borderRadius: "8px",
+  },
+  emptyCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "16px",
+    border: "1px solid #E2E8F0",
+    padding: "48px 24px",
+    textAlign: "center",
+  },
 };
 
 export default ProgressReportsPage;

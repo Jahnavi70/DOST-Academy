@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import AdminHeader from "../components/layout/AdminHeader";
 import { useAuth } from "../context/AuthContext";
 import { adminAPI, curriculumAPI } from "../services/api";
-import logo from "../assets/dost-logo.png";
 
 function ManageUsersPage() {
-  const navigate = useNavigate();
-  const { user: currentAdmin, logout } = useAuth();
-  const [showAdminMenu, setShowAdminMenu] = useState(false);
+  const { user: currentAdmin } = useAuth();
   const [users, setUsers] = useState([]);
   const [curriculums, setCurriculums] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -197,40 +194,9 @@ function ManageUsersPage() {
 
   return (
     <div style={styles.page}>
-      <header style={styles.navbar}>
-        <div style={styles.logoSection}>
-          <img src={logo} alt="DOST Logo" style={styles.logo} />
-          <div>
-            <h2 style={styles.title}>DOST Academy</h2>
-            <p style={styles.subtitle}>Users & Mentor Management</p>
-          </div>
-        </div>
-        <div style={styles.navSection}>
-          <div style={styles.navLinks}>
-            <button style={styles.navButton} onClick={() => navigate("/admin-dashboard")}>Dashboard</button>
-            <button style={styles.navButton} onClick={() => navigate("/executive-dashboard")}>Executive Analytics</button>
-            <button style={styles.navButton} onClick={() => navigate("/it-dashboard")}>IT Diagnostics</button>
-            <button style={styles.activeButton}>Users & Mentors</button>
-            <button style={styles.navButton} onClick={() => navigate("/manage-curriculums")}>Branches</button>
-            <button style={styles.navButton} onClick={() => navigate("/manage-courses")}>Courses (Monitor)</button>
-            <button style={styles.navButton} onClick={() => navigate("/progress-reports")}>Reports</button>
-            <div style={styles.profileWrapper}>
-              <button style={styles.profileButton} onClick={() => setShowAdminMenu(!showAdminMenu)}>Admin ▾</button>
-              {showAdminMenu && (
-                <div style={styles.dropdown}>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/admin-dashboard")}>Dashboard</p>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/manage-users")}>Users & Mentors</p>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/manage-curriculums")}>Branches</p>
-                  <p style={styles.dropdownItem} onClick={() => navigate("/manage-courses")}>Courses Monitor</p>
-                  <p style={styles.logoutItem} onClick={() => { logout(); navigate("/"); }}>Logout</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <AdminHeader activePortal="technical" />
 
-      <main style={styles.main}>
+      <main className="lms-page-container" style={styles.main}>
         <div style={styles.topRow}>
           <div>
             <h1 style={styles.heading}>User & Mentor Control Center</h1>
@@ -578,8 +544,7 @@ const styles = {
   profileButton: { backgroundColor: "#0B1F5E", color: "#ffffff", border: "none", padding: "8px 14px", borderRadius: "16px", cursor: "pointer", fontWeight: "600", fontSize: "13px" },
   dropdown: { position: "absolute", right: 0, top: "42px", width: "180px", backgroundColor: "#ffffff", borderRadius: "12px", boxShadow: "0 8px 25px rgba(0,0,0,0.15)", padding: "8px", zIndex: 999 },
   dropdownItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#0B1F5E", borderRadius: "6px", fontSize: "13px" },
-  logoutItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#DC2626", fontWeight: "700", borderRadius: "6px", fontSize: "13px" },
-  main: { padding: "30px", maxWidth: "1200px", margin: "0 auto" },
+  main: { padding: "clamp(20px, 3vw, 48px)", maxWidth: "100%", margin: "0", width: "100%", boxSizing: "border-box" },
   topRow: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "20px", marginBottom: "24px", flexWrap: "wrap" },
   heading: { color: "#0B1F5E", fontSize: "28px", margin: "0 0 6px" },
   subtext: { color: "#64748B", margin: 0, maxWidth: "750px", fontSize: "14px", lineHeight: "1.5" },
