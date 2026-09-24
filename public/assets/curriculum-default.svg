@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="currGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="60%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0B1F5E" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#currGrad)" />
+  <circle cx="680" cy="120" r="160" fill="#38BDF8" opacity="0.08" />
+  <circle cx="120" cy="380" r="180" fill="#6366F1" opacity="0.1" />
+  <rect x="60" y="60" width="180" height="28" rx="14" fill="#38BDF8" opacity="0.25" />
+  <text x="150" y="79" fill="#38BDF8" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" letter-spacing="1">CURRICULUM BRANCH</text>
+  <text x="60" y="160" fill="#FFFFFF" font-family="'Inter', sans-serif" font-size="34" font-weight="800" letter-spacing="-0.5">DOST Technical Branch</text>
+  <text x="60" y="200" fill="#93C5FD" font-family="'Inter', sans-serif" font-size="18" font-weight="600">Governed Specialization Framework</text>
+  <text x="60" y="245" fill="#CBD5E1" font-family="'Inter', sans-serif" font-size="14" font-weight="400">Structured lessons, verified mentors, and accredited practical evaluations.</text>
+  <rect x="60" y="360" width="680" height="1" fill="#FFFFFF" opacity="0.2" />
+  <text x="60" y="395" fill="#94A3B8" font-family="'Inter', sans-serif" font-size="12" font-weight="500">DEPARTMENT OF SCIENCE AND TECHNOLOGY • OFFICIAL LMS</text>
+</svg>
