@@ -254,7 +254,7 @@ const styles = {
   dropdown: { position: "absolute", right: 0, top: "42px", width: "180px", backgroundColor: "#ffffff", borderRadius: "12px", boxShadow: "0 8px 25px rgba(0,0,0,0.15)", padding: "8px", zIndex: 999 },
   dropdownItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#0B1F5E", borderRadius: "6px", fontSize: "13px" },
   logoutItem: { margin: 0, padding: "8px 12px", cursor: "pointer", color: "#DC2626", fontWeight: "700", borderRadius: "6px", fontSize: "13px" },
-  main: { padding: "clamp(16px, 2.5vw, 36px)", maxWidth: "1600px", margin: "0 auto", width: "100%", boxSizing: "border-box" },
+  main: { padding: "clamp(20px, 3vw, 48px)", maxWidth: "100%", margin: "0", width: "100%", boxSizing: "border-box" },
   headerRow: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "20px", marginBottom: "28px" },
   heading: { color: "#0B1F5E", fontSize: "28px", margin: "0 0 6px" },
   subtext: { color: "#64748B", margin: 0, maxWidth: "750px", fontSize: "14px", lineHeight: "1.5" },

@@ -104,7 +104,7 @@ function UserLandingPage() {
 
 const styles = {
   page: { minHeight: "100vh", background: "linear-gradient(135deg, #EEF2FF, #F8FAFC)", fontFamily: "Arial", overflowX: "hidden" },
-  main: { maxWidth: "1600px", margin: "0 auto", padding: "clamp(16px, 2.5vw, 36px)", boxSizing: "border-box" },
+  main: { width: "100%", maxWidth: "100%", margin: "0", padding: "clamp(20px, 3vw, 48px)", boxSizing: "border-box" },
   heroSection: { padding: "20px 0 40px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "36px", alignItems: "center" },
   carouselContainer: { position: "relative", borderRadius: "20px", overflow: "hidden", boxShadow: "0 8px 30px rgba(11, 31, 94, 0.1)" },
   carouselImage: { width: "100%", height: "380px", objectFit: "cover" },

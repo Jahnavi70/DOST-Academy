@@ -106,7 +106,7 @@ function DashboardPage() {
 
 const styles = {
   page: { minHeight: "100vh", background: "#F1F5F9", fontFamily: "Arial", overflowX: "hidden" },
-  main: { maxWidth: "1600px", margin: "0 auto", padding: "clamp(16px, 2.5vw, 36px)", boxSizing: "border-box" }, welcomeCard: { backgroundColor: "#ffffff", borderRadius: "24px", padding: "30px", marginBottom: "30px", boxShadow: "0 6px 20px rgba(0,0,0,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "20px", flexWrap: "wrap", minWidth: 0, boxSizing: "border-box" },
+  main: { width: "100%", maxWidth: "100%", margin: "0", padding: "clamp(20px, 3vw, 48px)", boxSizing: "border-box" }, welcomeCard: { backgroundColor: "#ffffff", borderRadius: "24px", padding: "30px", marginBottom: "30px", boxShadow: "0 6px 20px rgba(0,0,0,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "20px", flexWrap: "wrap", minWidth: 0, boxSizing: "border-box" },
   heading: { color: "#0B1F5E", fontSize: "36px", margin: "10px 0", wordBreak: "break-word" }, text: { color: "#64748B", fontSize: "16px" },
   continueButton: { backgroundColor: "#2563EB", color: "#ffffff", border: "none", padding: "13px 22px", borderRadius: "12px", cursor: "pointer", fontWeight: "700" },
   statsGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "20px", marginBottom: "30px" },

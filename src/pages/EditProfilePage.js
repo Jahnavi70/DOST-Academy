@@ -67,7 +67,7 @@ function EditProfilePage() {
 
 const styles = {
   page: { minHeight: "100vh", background: "#F1F5F9", fontFamily: "Arial" },
-  container: { maxWidth: "1600px", margin: "0 auto", padding: "clamp(16px, 2.5vw, 36px)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "24px", boxSizing: "border-box" },
+  container: { width: "100%", maxWidth: "100%", margin: "0", padding: "clamp(20px, 3vw, 48px)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "24px", boxSizing: "border-box" },
   profileCard: { backgroundColor: "#ffffff", padding: "32px", borderRadius: "24px", boxShadow: "0 6px 22px rgba(0,0,0,0.05)" },
   courseCard: { backgroundColor: "#ffffff", padding: "32px", borderRadius: "24px", boxShadow: "0 6px 22px rgba(0,0,0,0.05)" },
   heading: { color: "#0B1F5E", fontSize: "28px", marginBottom: "8px" }, text: { color: "#64748B", marginBottom: "20px" },

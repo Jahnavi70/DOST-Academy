@@ -35,12 +35,12 @@ export const typography = {
 };
 
 export const layout = {
-  // Fluid widescreen container utilizing display real estate up to 1600px
+  // Fluid widescreen container utilizing display real estate edge-to-edge
   container: {
     width: "100%",
-    maxWidth: "1600px",
-    margin: "0 auto",
-    padding: "clamp(16px, 2.5vw, 36px)",
+    maxWidth: "100%",
+    margin: "0",
+    padding: "clamp(20px, 3vw, 48px)",
     boxSizing: "border-box",
   },
   card: {

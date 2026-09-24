@@ -125,7 +125,7 @@ function AssignmentsPage() {
 
 const styles = {
   page: { minHeight: "100vh", background: "#F1F5F9", fontFamily: "Arial" },
-  main: { maxWidth: "1600px", margin: "0 auto", padding: "clamp(16px, 2.5vw, 36px)", boxSizing: "border-box" }, heading: { color: "#0B1F5E", fontSize: "32px", marginBottom: "25px" },
+  main: { width: "100%", maxWidth: "100%", margin: "0", padding: "clamp(20px, 3vw, 48px)", boxSizing: "border-box" }, heading: { color: "#0B1F5E", fontSize: "32px", marginBottom: "25px" },
   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px" },
   card: { backgroundColor: "#ffffff", padding: "24px", borderRadius: "18px", boxShadow: "0 4px 15px rgba(0,0,0,0.05)" },
   cardTitle: { color: "#0B1F5E", margin: "0 0 8px", fontSize: "18px" }, cardText: { color: "#475569", fontSize: "14px", lineHeight: "1.5", marginBottom: "8px" }, cardMeta: { color: "#64748B", fontSize: "13px", marginBottom: "4px" },

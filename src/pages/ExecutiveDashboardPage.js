@@ -173,9 +173,10 @@ const styles = {
     backgroundColor: "#F8FAFC",
   },
   content: {
-    maxWidth: "1600px",
-    margin: "0 auto",
-    padding: "clamp(16px, 2.5vw, 36px) clamp(16px, 2.5vw, 36px) 60px",
+    width: "100%",
+    maxWidth: "100%",
+    margin: "0",
+    padding: "clamp(20px, 3vw, 48px) clamp(20px, 3vw, 48px) 60px",
     boxSizing: "border-box",
   },
   topSection: {
@@ -261,8 +262,9 @@ const styles = {
     marginBottom: "6px",
   },
   kpiVal: {
-    fontSize: "24px",
+    fontSize: "36px",
     fontWeight: "800",
+    letterSpacing: "-0.02em",
     color: "#0B1F5E",
   },
   kpiPill: {

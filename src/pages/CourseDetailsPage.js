@@ -345,7 +345,7 @@ function buildOutcomes(course) {
 
 const styles = {
   page: { minHeight: "100vh", background: "#F8FAFC", fontFamily: "Arial, sans-serif" },
-  main: { padding: "clamp(16px, 2.5vw, 36px)", maxWidth: "1600px", margin: "0 auto", boxSizing: "border-box" },
+  main: { padding: "clamp(20px, 3vw, 48px)", width: "100%", maxWidth: "100%", margin: "0", boxSizing: "border-box" },
   breadcrumb: { display: "flex", gap: "8px", alignItems: "center", color: "#64748B", marginBottom: "20px", flexWrap: "wrap", fontSize: "13px" },
   crumbButton: { border: "none", background: "transparent", color: "#2563EB", cursor: "pointer", padding: 0, fontWeight: "700" },
   hero: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "24px", marginBottom: "24px" },

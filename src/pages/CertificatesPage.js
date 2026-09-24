@@ -137,7 +137,7 @@ function CertificatesPage() {
 
 const styles = {
   page: { minHeight: "100vh", background: "#F1F5F9", fontFamily: "Arial" },
-  main: { padding: "clamp(16px, 2.5vw, 36px)", maxWidth: "1600px", margin: "0 auto", boxSizing: "border-box" }, heading: { color: "#0B1F5E", fontSize: "32px", margin: "0 0 4px" },
+  main: { width: "100%", maxWidth: "100%", margin: "0", padding: "clamp(20px, 3vw, 48px)", boxSizing: "border-box" }, heading: { color: "#0B1F5E", fontSize: "32px", margin: "0 0 4px" },
   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" },
   card: { backgroundColor: "#ffffff", padding: "24px", borderRadius: "18px", boxShadow: "0 4px 15px rgba(0,0,0,0.05)", textAlign: "center", border: "1px solid #E2E8F0" },
   certHeader: { fontSize: "48px", marginBottom: "12px" },

@@ -247,9 +247,11 @@ const styles = {
     boxShadow: "0 2px 12px rgba(15, 23, 42, 0.04)",
   },
   container: {
-    maxWidth: "1600px",
-    margin: "0 auto",
-    padding: "12px clamp(16px, 2.5vw, 36px) 0 clamp(16px, 2.5vw, 36px)",
+    width: "100%",
+    maxWidth: "100%",
+    margin: "0",
+    padding: "12px clamp(20px, 3vw, 48px) 0 clamp(20px, 3vw, 48px)",
+    boxSizing: "border-box",
   },
   topRow: {
     display: "flex",
