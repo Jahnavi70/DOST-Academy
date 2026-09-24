@@ -248,9 +248,9 @@ const styles = {
   },
   container: {
     width: "100%",
-    maxWidth: "100%",
-    margin: "0",
-    padding: "12px clamp(20px, 3vw, 48px) 0 clamp(20px, 3vw, 48px)",
+    maxWidth: "1600px",
+    margin: "0 auto",
+    padding: "12px clamp(24px, 3.5vw, 48px) 0 clamp(24px, 3.5vw, 48px)",
     boxSizing: "border-box",
   },
   topRow: {
