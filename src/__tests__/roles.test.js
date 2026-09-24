@@ -57,4 +57,24 @@ describe('role helpers', () => {
     expect(navItemsFor('admin').map(i => i.label)).toContain('Users');
     expect(navItemsFor('employee').map(i => i.label)).toContain('Assignments');
   });
+
+  test('dual admin roles have appropriate access boundaries', () => {
+    expect(roleHome('admin_functional')).toBe('/executive-dashboard');
+    expect(roleHome('admin_technical')).toBe('/it-dashboard');
+
+    // Functional admin
+    expect(canAccess('admin_functional', '/executive-dashboard')).toBe(true);
+    expect(canAccess('admin_functional', '/manage-curriculums')).toBe(true);
+    expect(canAccess('admin_functional', '/manage-courses')).toBe(true);
+    expect(canAccess('admin_functional', '/it-dashboard')).toBe(false);
+
+    // Technical admin
+    expect(canAccess('admin_technical', '/it-dashboard')).toBe(true);
+    expect(canAccess('admin_technical', '/manage-users')).toBe(true);
+    expect(canAccess('admin_technical', '/manage-curriculums')).toBe(false);
+
+    // Nav items
+    expect(navItemsFor('admin_functional').map(i => i.label)).toContain('Executive Analytics');
+    expect(navItemsFor('admin_technical').map(i => i.label)).toContain('IT Diagnostics');
+  });
 });
