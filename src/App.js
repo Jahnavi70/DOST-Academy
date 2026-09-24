@@ -53,6 +53,7 @@ function App() {
           <Route path="/user-home" element={<RoleRoute allow={["employee"]}><UserLandingPage /></RoleRoute>} />
           <Route path="/dashboard" element={<RoleRoute allow={["employee"]}><DashboardPage /></RoleRoute>} />
           <Route path="/courses" element={<ProtectedRoute><CoursesPage /></ProtectedRoute>} />
+          <Route path="/courses/:id" element={<ProtectedRoute><CourseDetailsPage /></ProtectedRoute>} />
           <Route path="/course-details" element={<ProtectedRoute><CourseDetailsPage /></ProtectedRoute>} />
           <Route path="/course-details/:id" element={<ProtectedRoute><CourseDetailsPage /></ProtectedRoute>} />
           <Route path="/assignments" element={<RoleRoute allow={["employee"]}><AssignmentsPage /></RoleRoute>} />

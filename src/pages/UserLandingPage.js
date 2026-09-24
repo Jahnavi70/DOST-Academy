@@ -72,7 +72,15 @@ function UserLandingPage() {
       <section style={styles.cardsSection}>
         {curriculums.map((curriculum, index) => (
           <div key={index} style={styles.card} onClick={() => navigate("/courses")}>
-            <img src={curriculum.image || curriculumDefault} alt={curriculum.title} style={styles.cardImage} />
+            <img
+              src={curriculum.image || curriculumDefault}
+              alt={curriculum.title}
+              style={styles.cardImage}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = curriculumDefault;
+              }}
+            />
             <h3 style={styles.cardTitle}>{curriculum.title}</h3>
             <p style={styles.cardText}>{curriculum.description}</p>
             <p style={styles.cardMeta}>{curriculum.category} | {curriculum.level} | {(curriculum.courses || []).filter(course => course.status === 'published').length} courses</p>
@@ -88,7 +96,15 @@ function UserLandingPage() {
           <section style={styles.cardsSection}>
             {recommendations.map((rec, index) => (
               <div key={index} style={styles.card} onClick={() => navigate("/courses")}>
-                <img src={rec.image || courseDefault} alt={rec.title} style={styles.cardImage} />
+                <img
+                  src={rec.image || courseDefault}
+                  alt={rec.title}
+                  style={styles.cardImage}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = courseDefault;
+                  }}
+                />
                 <h3 style={styles.cardTitle}>{rec.title}</h3>
                 <p style={styles.cardText}>{rec.description}</p>
                 <p style={styles.cardMeta}>{rec.category} | {rec.level}</p>

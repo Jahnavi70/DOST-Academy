@@ -146,7 +146,15 @@ function CourseDetailsPage() {
           </div>
         </div>
         <aside style={styles.actionPanel}>
-          <img src={course.image || courseDefault} alt={course.title} style={styles.coverImage} />
+          <img
+            src={course.image || courseDefault}
+            alt={course.title}
+            style={styles.coverImage}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = courseDefault;
+            }}
+          />
           <div style={styles.mentorBox}>
             <p style={styles.kicker}>Assigned Course Mentor</p>
             <h3 style={styles.mentorName}>🧑‍🏫 {course.mentor?.name || "Mentor pending assignment"}</h3>

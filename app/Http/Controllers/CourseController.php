@@ -41,23 +41,28 @@ class CourseController extends Controller {
 
         $course->average_progress = round(Progress::where('course_id', $course->id)->avg('progress') ?? 0, 1);
 
-        $enrollment = Enrollment::where('user_id', $user->id)
-            ->where(function($q) use ($course) {
-                $q->where('course_id', $course->id)
-                  ->orWhere(function($sub) use ($course) {
-                      $sub->whereNull('course_id')->where('curriculum_id', $course->curriculum_id);
-                  });
-            })
-            ->latest()
-            ->first();
+        $enrollment = null;
+        $completedContentIds = [];
+
+        if ($user) {
+            $enrollment = Enrollment::where('user_id', $user->id)
+                ->where(function($q) use ($course) {
+                    $q->where('course_id', $course->id)
+                      ->orWhere(function($sub) use ($course) {
+                          $sub->whereNull('course_id')->where('curriculum_id', $course->curriculum_id);
+                      });
+                })
+                ->latest()
+                ->first();
+
+            $completedContentIds = CourseContentCompletion::where('course_id', $course->id)
+                ->where('user_id', $user->id)
+                ->pluck('course_content_id')
+                ->toArray();
+        }
 
         $course->enrollment_status = $enrollment ? $enrollment->status : null;
         $course->is_enrolled = $enrollment && in_array($enrollment->status, ['enrolled', 'in_progress', 'completed']);
-
-        $completedContentIds = CourseContentCompletion::where('course_id', $course->id)
-            ->where('user_id', $user->id)
-            ->pluck('course_content_id')
-            ->toArray();
 
         $course->contents->transform(function($content) use ($completedContentIds) {
             $content->is_completed = in_array($content->id, $completedContentIds);

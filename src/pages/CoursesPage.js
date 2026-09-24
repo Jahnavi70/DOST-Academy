@@ -76,18 +76,30 @@ function CoursesPage() {
 
     return (
       <div style={styles.card} className="lms-card-interactive">
-        <img
-          src={course.image || courseDefault}
-          alt={course.title}
-          style={styles.courseImage}
-        />
+        <div style={{ position: "relative", overflow: "hidden", cursor: "pointer" }} onClick={() => navigate(`/courses/${course.id}`)}>
+          <img
+            src={course.image || courseDefault}
+            alt={course.title}
+            style={styles.courseImage}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = courseDefault;
+            }}
+          />
+        </div>
         <div style={{ padding: "18px", display: "flex", flexDirection: "column", flex: 1, justifyContent: "space-between" }}>
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
               <span style={styles.levelBadge}>{course.level || "Beginner"}</span>
               <span style={{ fontSize: "12px", color: "#64748B" }}>⏱️ {course.duration || "4 weeks"}</span>
             </div>
-            <h3 style={styles.courseTitle}>{course.title}</h3>
+            <h3
+              style={{ ...styles.courseTitle, cursor: "pointer" }}
+              onClick={() => navigate(`/courses/${course.id}`)}
+              title="Click to view course syllabus"
+            >
+              {course.title}
+            </h3>
             <p style={styles.description}>{course.description}</p>
           </div>
 
@@ -100,8 +112,9 @@ function CoursesPage() {
               <button
                 style={styles.button}
                 onClick={() => navigate(`/courses/${course.id}`)}
+                title="View full course syllabus and lessons"
               >
-                View Syllabus
+                📖 View Syllabus
               </button>
 
               {isApproved ? (
