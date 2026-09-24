@@ -55,28 +55,28 @@ Backend health: `http://127.0.0.1:8000/api/curriculums` (login required for most
 
 ---
 
-## 4. Pre-registered Account
+## 4. Pre-registered Demo Accounts
 
-Password for admin: `password`
+Password for all accounts: `password`
 
 | Role | Email | Status | Description |
 |------|-------|--------|-------------|
-| Admin | `admin@dost.gov.ph` | Approved | Pre-registered System Administrator |
-
-*Note: All demo curriculum, mentor, and course mock data have been purged per requirements. The Administrator creates curriculum branches, provisions teachers/mentors, and approves new learner account registrations. Mentors create courses in their assigned branch and approve student enrollments.*
+| **Super Admin** | `admin@dost.gov.ph` | Approved | Full administrative access + 1-click mode switcher |
+| **IT Admin** | `it.admin@dost.gov.ph` | Approved | Technical admin: telemetry, uptime, database & role matrix |
+| **Functional Admin** | `functional.admin@dost.gov.ph` | Approved | HR / Content admin: curriculums, courses, mentor approvals |
+| **Faculty Mentor** | `asti.mentor@dost.gov.ph` | Approved | ASTI ICT mentor: course creation studio & grading desk |
+| **Learner / Employee** | `mark.reyes@dost.gov.ph` | Approved | Enrolled trainee: dashboard, interactive syllabus, quizzes |
 
 ---
 
 ## 5. What setup.bat does
 
-- Detects PHP and Node
-- Tests and verifies MySQL on port 3306; creates the `dost_academy` database automatically
-- Creates `.env` configured for MySQL + JWT
-- Installs Composer deps (`vendor/`) if missing (with PHP 8.5 compatibility flag `--ignore-platform-reqs`)
-- Installs npm deps (`node_modules/`) if missing
-- Generates `APP_KEY` and `JWT_SECRET`
-- Runs migrations on MySQL and seeds the single initial Administrator account
-- Creates `public/storage` link for uploaded course files
+- **Automated PHP & Node Discovery:** Detects PHP (XAMPP, Laragon, tools, Chocolatey, etc.) and Node.js.
+- **Dual-Engine Database Setup:** Connects to MySQL on port 3306 and creates `dost_academy`. If MySQL is unavailable on the client PC, it automatically activates the zero-config built-in SQLite engine with zero client intervention required!
+- **Self-Healing Dependencies:** Installs Composer packages (using bundled `composer.phar` with `--ignore-platform-reqs`) and React npm packages (with `--legacy-peer-deps`).
+- **Cryptographic Keys & Storage:** Generates `APP_KEY` and `JWT_SECRET`, and links `public/storage`.
+- **Seeding:** Runs migrations and seeds the 6 DOST agency branches, accredited courses, mentors, and demo learners.
+- **Auto Launch:** Starts backend on port 8000, frontend on port 3000, and opens `http://localhost:3000` in the browser!
 
 Logs: `_client_setup_logs\` (if created). Re-run is safe; it skips completed steps.
 

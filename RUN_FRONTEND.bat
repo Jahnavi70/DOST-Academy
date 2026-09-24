@@ -2,20 +2,22 @@
 title DOST Academy LMS - Frontend
 cd /d "%~dp0"
 
+:: ---- Find NPM ----
+set "NPM_CMD=npm"
+where npm.cmd >nul 2>&1 && set "NPM_CMD=npm.cmd"
+
 if not exist "node_modules" (
-    echo  [ERROR] node_modules\ missing. Run setup.bat first.
+    echo  [ERROR] node_modules missing. Run setup.bat first.
     pause
     exit /b 1
 )
 
 echo.
-echo  ==========================================
-echo   DOST Academy - Frontend
-echo   http://localhost:3000
-echo   Stop: Ctrl+C
-echo  ==========================================
+echo  ===========================================================
+echo   DOST Academy - Frontend Web Portal
+echo   Starting development server on http://localhost:3000
+echo   Stop Server: Press Ctrl+C
+echo  ===========================================================
 echo.
-echo  Waiting for browser to open...
-echo.
-npm.cmd start
+%NPM_CMD% start
 pause

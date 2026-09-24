@@ -4,9 +4,10 @@ color 0A
 cd /d "%~dp0"
 
 echo.
-echo  ==========================================
-echo   DOST Academy LMS - Starting servers
-echo  ==========================================
+echo  ===========================================================
+echo   DOST Academy LMS - Starting Application Servers
+echo   Team 59 (AstraLink) - IFN735 Industry Project
+echo  ===========================================================
 echo.
 
 :: ---- Find PHP ----
@@ -17,52 +18,75 @@ if not errorlevel 1 (
 )
 if not defined PHP_PATH if exist "C:\xampp\php\php.exe" set "PHP_PATH=C:\xampp\php\php.exe"
 if not defined PHP_PATH if exist "C:\php\php.exe" set "PHP_PATH=C:\php\php.exe"
+if not defined PHP_PATH if exist "C:\tools\php85\php.exe" set "PHP_PATH=C:\tools\php85\php.exe"
+if not defined PHP_PATH if exist "C:\tools\php84\php.exe" set "PHP_PATH=C:\tools\php84\php.exe"
+if not defined PHP_PATH if exist "C:\tools\php83\php.exe" set "PHP_PATH=C:\tools\php83\php.exe"
+if not defined PHP_PATH if exist "C:\tools\php82\php.exe" set "PHP_PATH=C:\tools\php82\php.exe"
+if not defined PHP_PATH if exist "C:\Program Files\PHP\php.exe" set "PHP_PATH=C:\Program Files\PHP\php.exe"
+if not defined PHP_PATH if exist "C:\Program Files (x86)\PHP\php.exe" set "PHP_PATH=C:\Program Files (x86)\PHP\php.exe"
 if not defined PHP_PATH if exist "C:\ProgramData\chocolatey\bin\php.exe" set "PHP_PATH=C:\ProgramData\chocolatey\bin\php.exe"
 
 if not defined PHP_PATH (
-    echo  [ERROR] PHP not found. Run setup.bat first.
+    echo  [ERROR] PHP not found. Please install PHP or XAMPP and run setup.bat first.
     pause
     exit /b 1
 )
 
-:: ---- Prerequisites ----
+:: ---- Find NPM ----
+set "NPM_CMD=npm"
+where npm.cmd >nul 2>&1 && set "NPM_CMD=npm.cmd"
+
+:: ---- Prerequisites Check ----
 if not exist "vendor\autoload.php" (
-    echo  [ERROR] Laravel vendor\ missing. Run setup.bat first.
-    pause
-    exit /b 1
+    echo  [NOTICE] Backend vendor folder missing. Launching automated setup...
+    call "%~dp0setup.bat"
+    exit /b %errorlevel%
 )
 if not exist "node_modules" (
-    echo  [ERROR] node_modules\ missing. Run setup.bat first.
-    pause
-    exit /b 1
+    echo  [NOTICE] Frontend node_modules missing. Launching automated setup...
+    call "%~dp0setup.bat"
+    exit /b %errorlevel%
 )
 if not exist ".env" (
-    echo  [ERROR] .env missing. Run setup.bat first.
-    pause
-    exit /b 1
+    echo  [NOTICE] Configuration .env missing. Launching automated setup...
+    call "%~dp0setup.bat"
+    exit /b %errorlevel%
 )
-if not exist "database\database.sqlite" type nul > "database\database.sqlite"
 
+:: Verify Database Health
 "%PHP_PATH%" dbcheck.php >nul 2>&1
 if errorlevel 1 (
-    echo  [ERROR] Database not seeded. Run setup.bat or RESET_DB.bat.
-    pause
-    exit /b 1
+    echo  [NOTICE] Database needs initialization or seeding. Running setup...
+    call "%~dp0setup.bat"
+    exit /b %errorlevel%
 )
 
-echo  [1/2] Starting backend  http://localhost:8000
-start "DOST Backend" cmd /k "cd /d "%~dp0" && "%PHP_PATH%" artisan serve --host=127.0.0.1 --port=8000"
+echo  [1/2] Starting Laravel API Backend on http://127.0.0.1:8000 ...
+start "DOST Backend (:8000)" cmd /k "cd /d "%~dp0" && "%PHP_PATH%" artisan serve --host=127.0.0.1 --port=8000"
 
 timeout /t 3 /nobreak >nul
 
-echo  [2/2] Starting frontend http://localhost:3000
-start "DOST Frontend" cmd /k "cd /d "%~dp0" && npm.cmd start"
+echo  [2/2] Starting React Web Portal on http://localhost:3000 ...
+start "DOST Frontend (:3000)" cmd /k "cd /d "%~dp0" && %NPM_CMD% start"
+
+timeout /t 4 /nobreak >nul
+start http://localhost:3000
 
 echo.
-echo  Backend:  http://127.0.0.1:8000
-echo  Frontend: http://localhost:3000
-echo  Login:    admin@dost.gov.ph / password
+echo  ===========================================================
+echo   DOST ACADEMY SERVERS RUNNING
+echo  ===========================================================
+echo   Web Portal:     http://localhost:3000
+echo   API Backend:    http://127.0.0.1:8000
 echo.
-echo  Close this window after servers are up.
+echo   PRE-REGISTERED DEMO ACCOUNTS (Password: password):
+echo   - Super Admin:       admin@dost.gov.ph
+echo   - IT Admin:          it.admin@dost.gov.ph
+echo   - Functional Admin:  functional.admin@dost.gov.ph
+echo   - Faculty Mentor:    asti.mentor@dost.gov.ph
+echo   - Employee/Learner:  mark.reyes@dost.gov.ph
+echo  ===========================================================
 echo.
-timeout /t 5 /nobreak >nul
+echo   You may minimize this window. Close the server windows to stop.
+echo.
+pause
