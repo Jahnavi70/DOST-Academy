@@ -34,7 +34,7 @@ DOST Academy System is a centralized Learning Management System (LMS) developed 
 ### Employee Side
 - Login / Signup with JWT authentication
 - User Landing Page with curriculum browser
-- Employee Dashboard with progress tracking
+- Employee Dashboard
 - Department-Based Course Catalogue
 - Course Details Page
 - Assignments Page with submission
