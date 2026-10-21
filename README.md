@@ -242,4 +242,4 @@ All platform graphics, banners, icons, and branding are self-contained local dev
 
 ## License
 
-This project is developed for IFN735 Industry Project at RMIT University.
+This project is developed for IFN735 Industry Project at Queensland University of Technology.
